@@ -10,6 +10,6 @@ namespace SchoolProject.Core.Features.Students.Commands.Models
         public string Address { get; set; } = string.Empty;
         public string phone { get; set; } = string.Empty;
 
-        public int DepartmetName { get; set; }
+        public int DepartmetId { get; set; }
     }
 }

@@ -22,7 +22,8 @@ builder.Services.AddDbContext<ApplicationDBContext>(
 // dependancy injection
 builder.Services.AddInfrastructureDependancy()
     .AddServiceDependancy()
-    .AddCoreDependancy();
+    .AddCoreDependancy()
+    .AddServiceRegisteration();
 #region localization
 
         builder.Services.AddControllersWithViews();

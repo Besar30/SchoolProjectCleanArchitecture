@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SchoolProject.Data.Entites;
+using SchoolProject.Data.Entites.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +11,9 @@ using System.Threading.Tasks;
 
 namespace SchoolProject.Infrastructure.Data
 {
-    public class ApplicationDBContext:DbContext
+    public class ApplicationDBContext:IdentityDbContext<User>
     {
+        public DbSet<User> User { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<DepartmetSubject> DepartmetSubjects { get; set; }
         public DbSet<Student> Students { get; set; }

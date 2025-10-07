@@ -13,7 +13,7 @@ namespace SchoolProject.Core.Mapping.Students
         public void MapStudentRequestTOstudent()
         {
            CreateMap<AddStudentRequest,Student>()
-                .ForMember(des=>des.DID, opt=>opt.MapFrom(src=>src.DepartmetName));
+                .ForMember(des=>des.DID, opt=>opt.MapFrom(src=>src.DepartmetId));
         }
     }
 }
