@@ -24,7 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\ApplicationUser\Queires\" />
     <Folder Include="Features\Departments\Commands\" />
+    <Folder Include="Mapping\ApplicationUser\QueryMapping\" />
   </ItemGroup>
 
 </Project>
