@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SchoolProject.Api.Const;
 using SchoolProject.Core.Features.ApplicationUser.Commands.Models;
 using SchoolProject.Core.Features.ApplicationUser.Queires.Models;
+using SchoolProject.Core.Features.Students.Commands.Models;
 using SchoolProject.Core.pagination;
 
 namespace SchoolProject.Api.Controllers
@@ -35,6 +36,14 @@ namespace SchoolProject.Api.Controllers
         {
             var response = await _mediator.Send(command);
             return response.IsSuccess ? Ok(response) : response.ToProblem();
+        }
+
+        [HttpPut("")]
+        public async Task<IActionResult> EditStudentAsync([FromBody] EditUserCommand request)
+        {
+            var result = await _mediator.Send(request);
+            return result.IsSuccess ?
+                Ok(result.Value) : result.ToProblem();
         }
     }
 }

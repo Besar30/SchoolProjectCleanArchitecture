@@ -14,7 +14,8 @@ using System.Threading.Tasks;
 
 namespace SchoolProject.Core.Features.ApplicationUser.Commands.Handlers
 {
-    public class UserCommandHandler(UserManager<User> userManager, IMapper mapper) : IRequestHandler<AddUserCommand, Result<string>>
+    public class UserCommandHandler(UserManager<User> userManager, IMapper mapper) : IRequestHandler<AddUserCommand, Result<string>>,
+                                                                                     IRequestHandler<EditUserCommand,Result<string>>
     {
         private readonly UserManager<User> _userManager = userManager;
         private readonly IMapper _mapper = mapper;
@@ -35,9 +36,27 @@ namespace SchoolProject.Core.Features.ApplicationUser.Commands.Handlers
             var result = await _userManager.CreateAsync(UserIdentity, request.Password);
             //faild
             if(!result.Succeeded)
-                return Result.Failure<string>(new Error( result.Errors.FirstOrDefault().Code, result.Errors.FirstOrDefault().Description,StatusCodes.Status409Conflict));
+                return Result.Failure<string>(new Error( result.Errors.FirstOrDefault()!.Code, result.Errors.FirstOrDefault()!.Description,StatusCodes.Status409Conflict));
             //secsess
             return Result.Success($"User '{UserIdentity.UserName}' created successfully.");
+        }
+
+        public async Task<Result<string>> Handle(EditUserCommand request, CancellationToken cancellationToken)
+        {
+            //check if user is exist
+            var oldUser = await _userManager.FindByIdAsync(request.Id);
+            //if not found
+            if (oldUser == null)
+                return Result.Failure<string>(UserErrors.UserNotFound);
+           //mapping
+           var newUser= _mapper.Map(request,oldUser);
+            //update
+            var result = await _userManager.UpdateAsync(newUser);
+            //resutl not success
+            if (!result.Succeeded)
+                return Result.Failure<string>(new Error(result.Errors.FirstOrDefault()!.Code, result.Errors.FirstOrDefault()!.Description, StatusCodes.Status409Conflict));
+            //result success
+            return Result.Success($"User '{newUser.UserName}' Edited successfully.");
         }
     }
 }
