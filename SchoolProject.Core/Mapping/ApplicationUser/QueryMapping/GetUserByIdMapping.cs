@@ -1,6 +1,4 @@
-﻿using SchoolProject.Core.Features.ApplicationUser.Commands.Models;
-using SchoolProject.Core.Features.Students.Commands.Models;
-using SchoolProject.Data.Entites;
+﻿using SchoolProject.Core.Features.ApplicationUser.Queires.Results;
 using SchoolProject.Data.Entites.Identity;
 using System;
 using System.Collections.Generic;
@@ -12,9 +10,9 @@ namespace SchoolProject.Core.Mapping.ApplicationUser
 {
     public partial class ApplicationUserProfile
     {
-        public void AddUserMapping()
+        public void GetUserByIdMapping()
         {
-            CreateMap<AddUserCommand,User>();
+            CreateMap<User, GetUserByIdResponse>();
         }
     }
 }

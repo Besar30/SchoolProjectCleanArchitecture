@@ -14,5 +14,8 @@ namespace SchoolProject.Shared.Errors
             new("User.EmailAlreadyExists", "Email already exists", StatusCodes.Status409Conflict);
         public static readonly Error UserNameAlreadyExists =
            new("User.UserNameAlreadyExists", " UserName already exists", StatusCodes.Status409Conflict);
+
+        public static readonly Error UserNotFound =
+        new("User.UserNotFound", " User Not Found", StatusCodes.Status404NotFound);
     }
 }
