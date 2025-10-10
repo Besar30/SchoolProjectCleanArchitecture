@@ -15,7 +15,9 @@ using System.Threading.Tasks;
 namespace SchoolProject.Core.Features.ApplicationUser.Commands.Handlers
 {
     public class UserCommandHandler(UserManager<User> userManager, IMapper mapper) : IRequestHandler<AddUserCommand, Result<string>>,
-                                                                                     IRequestHandler<EditUserCommand,Result<string>>
+                                                                                     IRequestHandler<EditUserCommand,Result<string>>,
+                                                                                     IRequestHandler<DeleteUserCommand,Result<string>>,
+                                                                                     IRequestHandler<ChangePasswordUserCommand,Result<string>>
     {
         private readonly UserManager<User> _userManager = userManager;
         private readonly IMapper _mapper = mapper;
@@ -57,6 +59,27 @@ namespace SchoolProject.Core.Features.ApplicationUser.Commands.Handlers
                 return Result.Failure<string>(new Error(result.Errors.FirstOrDefault()!.Code, result.Errors.FirstOrDefault()!.Description, StatusCodes.Status409Conflict));
             //result success
             return Result.Success($"User '{newUser.UserName}' Edited successfully.");
+        }
+
+        public async Task<Result<string>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+        {
+            //check if user is exist
+            var user = await _userManager.FindByIdAsync(request.Id);
+            if (user == null)
+                return Result.Failure<string>(UserErrors.UserNotFound);
+            var result = await _userManager.DeleteAsync(user);
+            if (!result.Succeeded)
+                return Result.Failure<string>(new Error(result.Errors.FirstOrDefault()!.Code, result.Errors.FirstOrDefault()!.Description, StatusCodes.Status409Conflict));
+            return Result.Success("User deleted successfully.");
+        }
+
+        public async Task<Result<string>> Handle(ChangePasswordUserCommand request, CancellationToken cancellationToken)
+        {
+            var user =await _userManager.FindByIdAsync(request.Id);
+            var result = await _userManager.ChangePasswordAsync(user!, request.Password, request.NewPassword);
+            if(!result.Succeeded)
+                return Result.Failure<string>(new Error(result.Errors.FirstOrDefault()!.Code, result.Errors.FirstOrDefault()!.Description, StatusCodes.Status409Conflict));
+            return Result.Success("Password changed successfully");
         }
     }
 }

@@ -6,6 +6,7 @@ using SchoolProject.Core.Features.ApplicationUser.Commands.Models;
 using SchoolProject.Core.Features.ApplicationUser.Queires.Models;
 using SchoolProject.Core.Features.Students.Commands.Models;
 using SchoolProject.Core.pagination;
+using SchoolProject.Shared.Absractions;
 
 namespace SchoolProject.Api.Controllers
 {
@@ -39,11 +40,25 @@ namespace SchoolProject.Api.Controllers
         }
 
         [HttpPut("")]
-        public async Task<IActionResult> EditStudentAsync([FromBody] EditUserCommand request)
+        public async Task<IActionResult> EditUserAsync([FromBody] EditUserCommand request)
         {
             var result = await _mediator.Send(request);
             return result.IsSuccess ?
-                Ok(result.Value) : result.ToProblem();
+                Ok(result) : result.ToProblem();
+        }
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> DeleteUserAsync([FromRoute] string Id)
+        {
+            var result = await _mediator.Send(new DeleteUserCommand(Id));
+            return result.IsSuccess ?
+               Ok(result) : result.ToProblem();
+        }
+        [HttpPut("changePassword")]
+        public async Task<IActionResult> ChangePasswodAsync([FromBody] ChangePasswordUserCommand request)
+        {
+            var result= await _mediator.Send(request);
+            return result.IsSuccess ?
+              Ok(result) : result.ToProblem();
         }
     }
 }
