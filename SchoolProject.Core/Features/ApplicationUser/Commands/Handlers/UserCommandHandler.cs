@@ -6,12 +6,6 @@ using SchoolProject.Core.Features.ApplicationUser.Commands.Models;
 using SchoolProject.Data.Entites.Identity;
 using SchoolProject.Shared.Absractions;
 using SchoolProject.Shared.Errors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace SchoolProject.Core.Features.ApplicationUser.Commands.Handlers
 {
     public class UserCommandHandler(UserManager<User> userManager, IMapper mapper) : IRequestHandler<AddUserCommand, Result<string>>,
@@ -21,7 +15,6 @@ namespace SchoolProject.Core.Features.ApplicationUser.Commands.Handlers
     {
         private readonly UserManager<User> _userManager = userManager;
         private readonly IMapper _mapper = mapper;
-
         public async Task<Result<string>> Handle(AddUserCommand request, CancellationToken cancellationToken)
         {
             //check email is exist

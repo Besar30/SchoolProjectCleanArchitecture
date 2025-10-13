@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SchoolProject.Api.Const;
@@ -10,6 +12,8 @@ namespace SchoolProject.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize]
     public class StudentController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
@@ -55,6 +59,8 @@ namespace SchoolProject.Api.Controllers
             return result.IsSuccess ?
                 Ok(result):
                 result.ToProblem();
-        } 
         }
+    
+
+    }
 }

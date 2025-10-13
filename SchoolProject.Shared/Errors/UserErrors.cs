@@ -17,5 +17,10 @@ namespace SchoolProject.Shared.Errors
 
         public static readonly Error UserNotFound =
         new("User.UserNotFound", " User Not Found", StatusCodes.Status404NotFound);
-    }
+        public static readonly Error InvalidCredentials = new(
+                 "User.InvalidCredentials",
+                 "Invalid email or password",
+                 StatusCodes.Status401Unauthorized);
+    
+}
 }
