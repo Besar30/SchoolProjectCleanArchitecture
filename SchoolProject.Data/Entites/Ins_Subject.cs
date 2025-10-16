@@ -21,6 +21,6 @@ namespace SchoolProject.Data.Entites
         [InverseProperty("InsSubjects")]
         public Subject? subject { get; set; }
 
-        
+
     }
 }

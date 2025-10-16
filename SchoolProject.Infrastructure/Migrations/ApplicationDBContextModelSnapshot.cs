@@ -485,6 +485,46 @@ namespace SchoolProject.Infrastructure.Migrations
                     b.Navigation("Subjects");
                 });
 
+            modelBuilder.Entity("SchoolProject.Data.Entites.Identity.User", b =>
+                {
+                    b.OwnsMany("SchoolProject.Data.Entites.Identity.RefreshToken", "refreshTokens", b1 =>
+                        {
+                            b1.Property<string>("UserId")
+                                .HasColumnType("nvarchar(450)");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<DateTime>("CreatedOn")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<DateTime>("ExpiresOn")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<string>("NewProperty")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<DateTime?>("RevokedOn")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<string>("Token")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("UserId", "Id");
+
+                            b1.ToTable("RefreshToken");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
+                    b.Navigation("refreshTokens");
+                });
+
             modelBuilder.Entity("SchoolProject.Data.Entites.Ins_Subject", b =>
                 {
                     b.HasOne("SchoolProject.Data.Entites.Instractor", "instractor")

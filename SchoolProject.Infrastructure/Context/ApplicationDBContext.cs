@@ -30,6 +30,7 @@ namespace SchoolProject.Infrastructure.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
             modelBuilder.Entity<DepartmetSubject>()
                 .HasKey(x => new{x.SubID, x.DID});
 

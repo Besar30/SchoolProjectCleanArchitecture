@@ -12,8 +12,8 @@ using SchoolProject.Infrastructure.Data;
 namespace SchoolProject.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20251007190550_addcustomidentitytable")]
-    partial class addcustomidentitytable
+    [Migration("20251015170721_refreshtoken")]
+    partial class refreshtoken
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -209,7 +209,6 @@ namespace SchoolProject.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -217,7 +216,6 @@ namespace SchoolProject.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Country")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -232,7 +230,6 @@ namespace SchoolProject.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImagePath")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
@@ -489,6 +486,46 @@ namespace SchoolProject.Infrastructure.Migrations
                     b.Navigation("Department");
 
                     b.Navigation("Subjects");
+                });
+
+            modelBuilder.Entity("SchoolProject.Data.Entites.Identity.User", b =>
+                {
+                    b.OwnsMany("SchoolProject.Data.Entites.Identity.RefreshToken", "refreshTokens", b1 =>
+                        {
+                            b1.Property<string>("UserId")
+                                .HasColumnType("nvarchar(450)");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<DateTime>("CreatedOn")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<DateTime>("ExpiresOn")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<string>("NewProperty")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<DateTime?>("RevokedOn")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<string>("Token")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("UserId", "Id");
+
+                            b1.ToTable("RefreshToken");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
+                    b.Navigation("refreshTokens");
                 });
 
             modelBuilder.Entity("SchoolProject.Data.Entites.Ins_Subject", b =>

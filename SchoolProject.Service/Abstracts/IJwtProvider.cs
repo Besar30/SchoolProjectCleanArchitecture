@@ -10,5 +10,6 @@ namespace SchoolProject.Service.Abstracts
     public interface IJwtProvider
     {
         (string Token, int ExpiresIn) GenerateToken(User user);
+        string? ValidateToken(string token);
     }
 }

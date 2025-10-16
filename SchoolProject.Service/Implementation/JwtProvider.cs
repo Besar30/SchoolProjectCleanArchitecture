@@ -42,5 +42,53 @@ namespace SchoolProject.Service.Implementation
                );
             return (token: new JwtSecurityTokenHandler().WriteToken(token), expiresIN: _options.ExpiresIn * 60);
     }
+
+        public string? ValidateToken(string token)
+        {
+            try
+            {
+                Console.WriteLine("------------------------");
+                Console.WriteLine($"Token to validate: {token}");
+
+                if (string.IsNullOrEmpty(token)) return null;
+                if (token.StartsWith("Bearer ")) token = token.Substring(7);
+
+                // الطريقة الآمنة - اقرأ الـ token من غير validation
+                var tokenHandler = new JwtSecurityTokenHandler();
+
+                if (!tokenHandler.CanReadToken(token))
+                {
+                    Console.WriteLine("Cannot read token - invalid format");
+                    return null;
+                }
+
+                var jwtToken = tokenHandler.ReadJwtToken(token);
+
+                // اطبع كل الـ claims عشان نتأكد
+                Console.WriteLine("=== ALL CLAIMS IN TOKEN ===");
+                foreach (var claim in jwtToken.Claims)
+                {
+                    Console.WriteLine($"{claim.Type}: {claim.Value}");
+                }
+                Console.WriteLine("===========================");
+
+                // إبحث عن الـ UserId
+                var userId = jwtToken.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub)?.Value;
+
+                if (string.IsNullOrEmpty(userId))
+                {
+                    Console.WriteLine("User ID not found in token");
+                    return null;
+                }
+
+                Console.WriteLine($"✅ User ID extracted: {userId}");
+                return userId;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Token reading error: {ex.Message}");
+                return null;
+            }
+        }
     }
 }

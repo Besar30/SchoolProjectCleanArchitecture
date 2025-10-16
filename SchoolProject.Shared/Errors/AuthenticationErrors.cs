@@ -1,0 +1,22 @@
+﻿using Microsoft.AspNetCore.Http;
+using SchoolProject.Shared.Absractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SchoolProject.Shared.Errors
+{
+    public static class AuthenticationErrors
+    {
+        public static readonly Error TokenNotValid = new Error(
+                                            "Token.Invalid",
+                                            "Refresh token is not valid or expired",
+                                            StatusCodes.Status401Unauthorized);
+        public static Error RefreshTokenNotFound = new Error(
+                                            "REFRESH_TOKEN_NOT_FOUND",
+                                            "Refresh token not found or inactive",
+                                            StatusCodes.Status401Unauthorized);
+     }
+}

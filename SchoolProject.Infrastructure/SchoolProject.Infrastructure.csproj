@@ -24,4 +24,8 @@
     <ProjectReference Include="..\SchoolProject.Data\SchoolProject.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

@@ -18,5 +18,17 @@ namespace SchoolProject.Api.Controllers
             var resutl = await _mediator.Send(command);
             return resutl.IsSuccess ? Ok(resutl) : resutl.ToProblem();
         }
+        [HttpPost("Refresh-Token")]
+        public async Task<IActionResult> GetRefreshToken([FromBody] GetRefreshTokenCommand command)
+        {
+            var resutl = await _mediator.Send(command);
+            return resutl.IsSuccess ? Ok(resutl) : resutl.ToProblem();
+        }
+        [HttpPost("Revoke-Refresh-Token")]
+        public async Task<IActionResult> RevokeRefreshToken([FromBody] RevokeRefreshTokenCommand command)
+        {
+            var resutl = await _mediator.Send(command);
+            return resutl.IsSuccess ? Ok(resutl) : resutl.ToProblem();
+        }
     }
 }

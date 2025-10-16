@@ -9,17 +9,17 @@ using System.Threading.Tasks;
 
 namespace SchoolProject.Data.Entites
 {
-    public class Subject:GeneralLocalizableEntity
+    public class Subject : GeneralLocalizableEntity
     {
         public Subject()
         {
             StudentsSubjects = new HashSet<StudentSubject>();
             DepartmetsSubjects = new HashSet<DepartmetSubject>();
-            InsSubjects=new HashSet<Ins_Subject>();
+            InsSubjects = new HashSet<Ins_Subject>();
         }
         [Key]
         public int SubID { get; set; }
-      
+
         public string? SubjectNameAr { get; set; }
         public string? SubjectNameEn { get; set; }
 
