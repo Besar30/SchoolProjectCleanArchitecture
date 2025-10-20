@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using SchoolProject.Core.Features.Authentication.Commands.Models;
 using SchoolProject.Core.Features.Authentication.Commands.Results;
 using SchoolProject.Data.Entites.Identity;
+using SchoolProject.Infrastructure.Data;
 using SchoolProject.Service.Abstracts;
 using SchoolProject.Shared.Absractions;
 using SchoolProject.Shared.Errors;
@@ -13,13 +14,15 @@ using System.Security.Cryptography;
 
 namespace SchoolProject.Core.Features.Authentication.Commands.Handlers
 {
-    public class AuthenticationCommandHandler(UserManager<User> userManager,IJwtProvider jwtProvider) : IRequestHandler<SigninCommand, Result<SigninResponse>>,
+    public class AuthenticationCommandHandler(UserManager<User> userManager,IJwtProvider jwtProvider,ApplicationDBContext context) : IRequestHandler<SigninCommand, Result<SigninResponse>>,
                                                                                                         IRequestHandler<GetRefreshTokenCommand,Result<SigninResponse>>,
                                                                                                         IRequestHandler<RevokeRefreshTokenCommand,Result<bool>>
     {
         private readonly UserManager<User> _userManager = userManager;
         private readonly IJwtProvider _jwtProvider = jwtProvider;
+        private readonly ApplicationDBContext _context = context;
         private readonly int _refreshTokenExpriyDays = 14;
+
 
         public async Task<Result<SigninResponse>> Handle(SigninCommand request, CancellationToken cancellationToken)
         {
@@ -32,7 +35,8 @@ namespace SchoolProject.Core.Features.Authentication.Commands.Handlers
             if (!IsValidPassword)
                 return Result.Failure<SigninResponse>(UserErrors.InvalidCredentials);
             // generate token
-            var (token, expiresIn) = _jwtProvider.GenerateToken(user);
+            var (userRoles, userPermissions) = await GetRolesAndPermissions(user, cancellationToken);
+            var (token, expiresIn) = _jwtProvider.GenerateToken(user, userRoles, userPermissions);
             var response = await GetSigninResponse(user, _refreshTokenExpriyDays, token, expiresIn);
             // return success result
             return Result.Success(response);
@@ -55,7 +59,8 @@ namespace SchoolProject.Core.Features.Authentication.Commands.Handlers
             if(userRereshToken==null)
                 return Result.Failure<SigninResponse>(AuthenticationErrors.RefreshTokenNotFound);
             userRereshToken.RevokedOn = DateTime.UtcNow;
-            var (Newtoken, expiresIn) = _jwtProvider.GenerateToken(user);
+            var (userRoles, userPermissions) = await GetRolesAndPermissions(user, cancellationToken);
+            var (Newtoken, expiresIn) = _jwtProvider.GenerateToken(user,userRoles,userPermissions);
             var response = await GetSigninResponse(user, _refreshTokenExpriyDays, Newtoken, expiresIn);
             return Result.Success(response);
         }
@@ -107,6 +112,17 @@ namespace SchoolProject.Core.Features.Authentication.Commands.Handlers
             return response;
         }
 
-        
+        private async Task<(IEnumerable<string> roles, IEnumerable<string> permissions)> GetRolesAndPermissions(User user, CancellationToken cancellationToken)
+        {
+            var userRoles = await _userManager.GetRolesAsync(user);
+            var userPermissions = await (from r in _context.Roles
+                                         join p in _context.RoleClaims
+                                         on r.Id equals p.RoleId
+                                         where userRoles.Contains(r.Name!)
+                                         select p.ClaimValue!)
+                                     .Distinct()
+                                     .ToListAsync(cancellationToken);
+            return (userRoles, userPermissions);
+        }
     }
 }

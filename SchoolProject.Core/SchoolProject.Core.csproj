@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="Features\Authentication\Queires\" />
+    <Folder Include="Features\Authrization\Queries\" />
     <Folder Include="Features\Departments\Commands\" />
   </ItemGroup>
 

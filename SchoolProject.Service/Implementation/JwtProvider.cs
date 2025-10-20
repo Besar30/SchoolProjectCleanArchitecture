@@ -18,7 +18,7 @@ namespace SchoolProject.Service.Implementation
     {
         private readonly JwtOptions _options = options.Value;
 
-        public (string Token, int ExpiresIn) GenerateToken(User user)
+        public (string Token, int ExpiresIn) GenerateToken(User user, IEnumerable<string> roles, IEnumerable<string> permissions)
         {
             
             Claim[] claims = [
@@ -26,7 +26,9 @@ namespace SchoolProject.Service.Implementation
                 new(JwtRegisteredClaimNames.Email,user.Email!),
                 new(JwtRegisteredClaimNames.GivenName,user.FirstName),
                 new(JwtRegisteredClaimNames.FamilyName,user.LastName),
-                new(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())// id for token
+                new(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
+                new(nameof(roles),JsonSerializer.Serialize(roles),JsonClaimValueTypes.JsonArray),
+                new(nameof(permissions),JsonSerializer.Serialize(permissions),JsonClaimValueTypes.JsonArray)// id for token
                 ];
             var symmetricsecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Key));
             var signingCredentials = new SigningCredentials(symmetricsecurityKey, SecurityAlgorithms.HmacSha256);

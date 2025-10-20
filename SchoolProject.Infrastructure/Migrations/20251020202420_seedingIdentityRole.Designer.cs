@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolProject.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using SchoolProject.Infrastructure.Data;
 namespace SchoolProject.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20251020202420_seedingIdentityRole")]
+    partial class seedingIdentityRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,210 +53,210 @@ namespace SchoolProject.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Students:Read",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 2,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Students:Add",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 3,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Students:Update",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 4,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Students:Delete",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 5,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Departments:Read",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 6,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Departments:Add",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 7,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Departments:Update",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 8,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Departments:Delete",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 9,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Instructors:Read",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 10,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Instructors:Add",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 11,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Instructors:Update",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 12,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Instructors:Delete",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 13,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Subjects:Read",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 14,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Subjects:Add",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 15,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Subjects:Update",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 16,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Subjects:Delete",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 17,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Users:Read",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 18,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Users:Add",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 19,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Users:Update",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 20,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Users:Delete",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 21,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Roles:Read",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 22,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Roles:Add",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 23,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Roles:Update",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 24,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Roles:Delete",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 25,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Authorization:AssignRole",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 26,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Authorization:RemoveRole",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 27,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Results:Read",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 28,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Results:Add",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 29,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Results:Update",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         },
                         new
                         {
                             Id = 30,
-                            ClaimType = "permissions",
+                            ClaimType = "Permissions",
                             ClaimValue = "Results:Delete",
                             RoleId = "0195442f-5b32-7334-9a35-d43ff70d3aa9"
                         });

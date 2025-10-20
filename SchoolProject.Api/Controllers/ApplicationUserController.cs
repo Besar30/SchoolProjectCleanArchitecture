@@ -60,5 +60,6 @@ namespace SchoolProject.Api.Controllers
             return result.IsSuccess ?
               Ok(result) : result.ToProblem();
         }
+       
     }
 }

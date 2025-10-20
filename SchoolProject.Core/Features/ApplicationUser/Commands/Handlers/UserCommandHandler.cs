@@ -32,6 +32,7 @@ namespace SchoolProject.Core.Features.ApplicationUser.Commands.Handlers
             //faild
             if(!result.Succeeded)
                 return Result.Failure<string>(new Error( result.Errors.FirstOrDefault()!.Code, result.Errors.FirstOrDefault()!.Description,StatusCodes.Status409Conflict));
+            await _userManager.AddToRoleAsync(UserIdentity, "Member");
             //secsess
             return Result.Success($"User '{UserIdentity.UserName}' created successfully.");
         }

@@ -2,16 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolProject.Data.Entites;
 using SchoolProject.Data.Entites.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SchoolProject.Infrastructure.Data
 {
-    public class ApplicationDBContext:IdentityDbContext<User>
+    public class ApplicationDBContext:IdentityDbContext<User,ApplicationRole,string>
     {
         public DbSet<User> User { get; set; }
         public DbSet<Department> Departments { get; set; }

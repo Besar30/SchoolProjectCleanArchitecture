@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SchoolProject.Core;
+using SchoolProject.Data.Entites.Identity;
 using SchoolProject.Infrastructure;
 using SchoolProject.Infrastructure.Data;
 using SchoolProject.Service;
@@ -86,13 +88,13 @@ builder.Services.AddCors(options => options.AddPolicy(name: Cors,
     ));
 #endregion
 var app = builder.Build();
-
+//#endregion
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
 app.UseRouting();
 app.UseCors(Cors);
 #region localization middelware

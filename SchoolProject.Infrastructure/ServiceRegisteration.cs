@@ -4,12 +4,7 @@
     using SchoolProject.Data.Entites.Identity;
     using SchoolProject.Infrastructure.Abstracts;
     using SchoolProject.Infrastructure.Data;
-    using SchoolProject.Infrastructure.Reposatories;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+  
 
     namespace SchoolProject.Infrastructure
     {
@@ -17,7 +12,7 @@
         {
             public static IServiceCollection AddServiceRegisteration(this IServiceCollection services)
             {
-               services.AddIdentity<User,IdentityRole>(option=>
+               services.AddIdentity<User,ApplicationRole>(option=>
                {
                    // Password settings.
                    option.Password.RequireDigit = true;

@@ -7,13 +7,16 @@ using SchoolProject.Api.Const;
 using SchoolProject.Core.Features.Students.Commands.Models;
 using SchoolProject.Core.Features.Students.Queires.Models;
 using SchoolProject.Core.pagination;
+using SchoolProject.Infrastructure.Abstracts.Const;
+using SchoolProject.Service.Abstracts.Filter;
 
 namespace SchoolProject.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize]
+    // [Authorize(Roles =DefaultRoles.Admin)]
+    [HasPermission(Permissions.GetStudents)]
+
     public class StudentController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
