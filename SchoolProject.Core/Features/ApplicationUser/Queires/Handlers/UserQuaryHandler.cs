@@ -7,6 +7,7 @@ using SchoolProject.Core.Features.ApplicationUser.Queires.Results;
 using SchoolProject.Core.pagination;
 using SchoolProject.Data.Entites.Identity;
 using SchoolProject.Shared.Absractions;
+
 using SchoolProject.Shared.Errors;
 namespace SchoolProject.Core.Features.ApplicationUser.Queires.Handlers
 {

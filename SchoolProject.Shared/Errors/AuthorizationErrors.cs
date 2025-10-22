@@ -18,5 +18,18 @@ namespace SchoolProject.Shared.Errors
         "Role.AlreadyExists",
         "The role already exists.",
         StatusCodes.Status409Conflict);
+
+        public static readonly Error NoRolesFound = new Error(
+       "Roles.Notfound.",
+       "No roles found.",
+       StatusCodes.Status404NotFound);
+        public static readonly Error RoleNotFound = new Error(
+      "Roles.Notfound.",
+      "Role Not Found.",
+      StatusCodes.Status404NotFound);
+        public static readonly Error InvalidPermission = new(
+     "Roles.InvalidPermission",
+     "Invalid Permission.",
+     StatusCodes.Status400BadRequest);
     }
 }

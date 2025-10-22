@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 
 namespace SchoolProject.Core.Features.Authrization.Commands.Models
 {
-    public class AddRoleCommand:IRequest<Result<string>>
+    public class UpdateRoleCommand:IRequest<Result<string>>
     {
+        public string Id { get; set; }
         public string RoleName { get; set; }
-        public IList<string> Permission {  get; set; }
+        public IList<string> Permission { get; set; }
+
     }
 }

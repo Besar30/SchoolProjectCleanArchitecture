@@ -14,8 +14,8 @@ namespace SchoolProject.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    // [Authorize(Roles =DefaultRoles.Admin)]
-    [HasPermission(Permissions.GetStudents)]
+    [Authorize(Roles =DefaultRoles.Admin)]
+    //[HasPermission(Permissions.GetStudents)]
 
     public class StudentController(IMediator mediator) : ControllerBase
     {

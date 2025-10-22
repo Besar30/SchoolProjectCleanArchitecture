@@ -25,8 +25,12 @@
 
   <ItemGroup>
     <Folder Include="Features\Authentication\Queires\" />
-    <Folder Include="Features\Authrization\Queries\" />
     <Folder Include="Features\Departments\Commands\" />
+    <Folder Include="Mapping\Authorization\CommandMapping\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Features\Authrization\Queries\Results\GetAllRoleResponse.cs" />
   </ItemGroup>
 
 </Project>

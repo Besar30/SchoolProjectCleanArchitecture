@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using SchoolProject.Shared.Absractions;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,12 @@ using System.Threading.Tasks;
 
 namespace SchoolProject.Core.Features.Authrization.Commands.Models
 {
-    public class AddRoleCommand:IRequest<Result<string>>
+    public class ToggleStatusCommand:IRequest<Result<bool>>
     {
-        public string RoleName { get; set; }
-        public IList<string> Permission {  get; set; }
+        public string Id { get; set; }
+        public ToggleStatusCommand(string id)
+        {
+            Id = id;
+        }
     }
 }
