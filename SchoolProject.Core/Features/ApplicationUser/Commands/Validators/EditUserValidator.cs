@@ -11,6 +11,9 @@ namespace SchoolProject.Core.Features.ApplicationUser.Commands.Validators
     public class EditUserValidator:AbstractValidator<EditUserCommand>
     {
         public EditUserValidator() {
+            RuleFor(x => x.Id)
+                .NotEmpty()
+                .NotNull();
                 RuleFor(x => x.Email)
                   .NotEmpty().WithMessage("Email is required.")
                   .EmailAddress().WithMessage("Invalid email format.");
@@ -26,6 +29,13 @@ namespace SchoolProject.Core.Features.ApplicationUser.Commands.Validators
                 RuleFor(x => x.LastName)
                     .NotEmpty().WithMessage("Last name is required.")
                     .MaximumLength(50).WithMessage("Last name cannot exceed 50 characters.");
+            RuleFor(x => x.Roles)
+             .NotEmpty()
+             .NotNull();
+            RuleFor(x => x.Roles)
+                .Must(x => x.Distinct().Count() == x.Count)
+                .WithMessage("You Cannot add dublicated Role.")
+                .When(x => x.Roles != null);
 
         }
     }

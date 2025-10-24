@@ -20,7 +20,12 @@ namespace SchoolProject.Shared.Errors
         public static readonly Error InvalidCredentials = new(
                  "User.InvalidCredentials",
                  "Invalid email or password",
-                 StatusCodes.Status401Unauthorized);
-    
-}
+                 StatusCodes.Status400BadRequest);
+        public static readonly Error UserIsDisabled = new(
+                                                        "User.Disabled",
+                                                        "This user account is disabled.",
+                                                        StatusCodes.Status403Forbidden);
+
+
+    }
 }

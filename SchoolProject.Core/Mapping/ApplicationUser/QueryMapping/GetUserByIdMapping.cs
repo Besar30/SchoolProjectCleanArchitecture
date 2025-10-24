@@ -13,6 +13,7 @@ namespace SchoolProject.Core.Mapping.ApplicationUser
         public void GetUserByIdMapping()
         {
             CreateMap<User, GetUserByIdResponse>();
+                
         }
     }
 }

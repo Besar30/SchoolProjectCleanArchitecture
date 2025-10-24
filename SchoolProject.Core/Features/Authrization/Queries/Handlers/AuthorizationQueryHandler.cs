@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SchoolProject.Core.Features.ApplicationUser.Queires.Results;
 using SchoolProject.Core.Features.Authrization.Queries.Models;
 using SchoolProject.Core.Features.Authrization.Queries.Results;
 using SchoolProject.Data.Entites.Identity;
@@ -16,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace SchoolProject.Core.Features.Authrization.Queries.Handlers
 {
-    public class RoleQueryHandler(RoleManager<ApplicationRole> roleManager, IMapper mapper) : IRequestHandler<GetAllRoleQuery, Result<List<GetAllRoleResponse>>>,
+    public class AuthorizationQueryHandler(RoleManager<ApplicationRole> roleManager, IMapper mapper) : IRequestHandler<GetAllRoleQuery, Result<List<GetAllRoleResponse>>>,
                                                                                               IRequestHandler<GetRoleDetailsByIdQuery,Result<GetRoleDetailsByIdResponse>>
     {
         private readonly RoleManager<ApplicationRole> _roleManager = roleManager;

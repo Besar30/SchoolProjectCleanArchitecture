@@ -1,10 +1,13 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using SchoolProject.Core.Features.Authentication.Commands.Models;
 using SchoolProject.Core.Features.Authentication.Commands.Results;
 using SchoolProject.Data.Entites.Identity;
+using SchoolProject.Infrastructure.Abstracts.Const;
 using SchoolProject.Infrastructure.Data;
 using SchoolProject.Service.Abstracts;
 using SchoolProject.Shared.Absractions;
@@ -14,22 +17,43 @@ using System.Security.Cryptography;
 
 namespace SchoolProject.Core.Features.Authentication.Commands.Handlers
 {
-    public class AuthenticationCommandHandler(UserManager<User> userManager,IJwtProvider jwtProvider,ApplicationDBContext context) : IRequestHandler<SigninCommand, Result<SigninResponse>>,
+    public class AuthenticationCommandHandler(UserManager<User> userManager,IJwtProvider jwtProvider,ApplicationDBContext context, IMapper mapper) : IRequestHandler<SigninCommand, Result<SigninResponse>>,
                                                                                                         IRequestHandler<GetRefreshTokenCommand,Result<SigninResponse>>,
                                                                                                         IRequestHandler<RevokeRefreshTokenCommand,Result<bool>>
+                                                                                                        ,IRequestHandler<RegistrationCommand,Result<string>>
     {
         private readonly UserManager<User> _userManager = userManager;
         private readonly IJwtProvider _jwtProvider = jwtProvider;
         private readonly ApplicationDBContext _context = context;
+        private readonly IMapper _mapper = mapper;
         private readonly int _refreshTokenExpriyDays = 14;
 
-
+        public async Task<Result<string>> Handle(RegistrationCommand request, CancellationToken cancellationToken)
+        {
+            var EmailIsExits= await _userManager.FindByEmailAsync(request.Email);
+            if (EmailIsExits != null)
+                return Result.Failure<string>(AuthenticationErrors.EmailAlreadyExists);
+            var UserNameIsExist= await _userManager.FindByNameAsync(request.UserName);
+            if(UserNameIsExist != null)
+                return Result.Failure<string>(AuthenticationErrors.UserNameAlreadyExists);
+            var UserIdentity = _mapper.Map<User>(request);
+            var result = await _userManager.CreateAsync(UserIdentity, request.Password);
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(UserIdentity, DefaultRoles.Member);
+                return Result.Success("User created successfully");
+            }
+            return Result.Failure<string>(new Error(result.Errors.FirstOrDefault()!.Code, result.Errors.FirstOrDefault()!.Description, StatusCodes.Status409Conflict));
+        }
         public async Task<Result<SigninResponse>> Handle(SigninCommand request, CancellationToken cancellationToken)
         {
             //check if email exist
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null) 
                 return Result.Failure<SigninResponse>(UserErrors.InvalidCredentials);
+            //check is user not Disable
+            if(user.IsDisabled)
+                return Result.Failure< SigninResponse>(UserErrors.UserIsDisabled);
             //check password
             var IsValidPassword = await _userManager.CheckPasswordAsync(user,request.Password);
             if (!IsValidPassword)
@@ -48,12 +72,16 @@ namespace SchoolProject.Core.Features.Authentication.Commands.Handlers
             var UserId= _jwtProvider.ValidateToken(request.token);
             if(UserId == null)
                 return Result.Failure<SigninResponse>(AuthenticationErrors.TokenNotValid);
+            
             //getUser
             var user = await _userManager.Users
                                           .Include(u => u.refreshTokens)
                                           .FirstOrDefaultAsync(u => u.Id == UserId);
             if (user==null)
                 return Result.Failure<SigninResponse>(UserErrors.UserNotFound);
+
+            if (user.IsDisabled)
+                return Result.Failure<SigninResponse>(UserErrors.UserIsDisabled);
             //selectRefreshToken
             var userRereshToken = user.refreshTokens.SingleOrDefault(x => x.Token == request.refreshToken && x.IsActive);
             if(userRereshToken==null)

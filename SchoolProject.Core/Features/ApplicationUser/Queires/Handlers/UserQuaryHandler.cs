@@ -19,7 +19,7 @@ namespace SchoolProject.Core.Features.ApplicationUser.Queires.Handlers
 
         public async Task<Result<PaginatedList<GetUserPaginationResponse>>> Handle(GetUserPaginationQuery request, CancellationToken cancellationToken)
         {
-           var Users = _userManager.Users.AsQueryable();
+           var Users =  _userManager.Users.AsQueryable();
             var mappedQuery = _mapper.ProjectTo<GetUserPaginationResponse>(Users);
 
            var PaginationList = await PaginatedList<GetUserPaginationResponse>.CreateAsync(
@@ -32,8 +32,10 @@ namespace SchoolProject.Core.Features.ApplicationUser.Queires.Handlers
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == request.Id);
             if (user == null)
                 return Result.Failure<GetUserByIdResponse>(UserErrors.UserNotFound);
+            var userRoles =await _userManager.GetRolesAsync(user);
             var usermapped= _mapper.Map<GetUserByIdResponse>(user);
-            return Result.Success<GetUserByIdResponse>(usermapped);
+            usermapped.Roles = userRoles;
+            return Result.Success(usermapped);
         }
     }
 }

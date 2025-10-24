@@ -1,19 +1,19 @@
 ﻿using FluentValidation;
-using SchoolProject.Core.Features.ApplicationUser.Commands.Models;
+using SchoolProject.Core.Features.Authentication.Commands.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SchoolProject.Core.Features.ApplicationUser.Commands.Validators
+namespace SchoolProject.Core.Features.Authentication.Commands.Validator
 {
-    public class AddUserValidator: AbstractValidator<AddUserCommand>
+    public class RegistraionValidator:AbstractValidator<RegistrationCommand>
     {
-        public AddUserValidator() {
+        public RegistraionValidator() {
             RuleFor(x => x.Email)
-           .NotEmpty().WithMessage("Email is required.")
-           .EmailAddress().WithMessage("Invalid email format.");
+          .NotEmpty().WithMessage("Email is required.")
+          .EmailAddress().WithMessage("Invalid email format.");
 
             RuleFor(x => x.UserName)
                 .NotEmpty().WithMessage("Username is required.")
@@ -37,13 +37,6 @@ namespace SchoolProject.Core.Features.ApplicationUser.Commands.Validators
 
             RuleFor(x => x.ConfirmPassword)
                 .Equal(x => x.Password).WithMessage("Passwords do not match.");
-            RuleFor(x => x.Roles)
-               .NotEmpty()
-               .NotNull();
-            RuleFor(x => x.Roles)
-                .Must(x => x.Distinct().Count() == x.Count)
-                .WithMessage("You Cannot add dublicated Role.")
-                .When(x => x.Roles != null);
         }
     }
 }

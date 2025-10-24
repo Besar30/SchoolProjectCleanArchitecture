@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SchoolProject.Core.Features.ApplicationUser.Commands.Models
+namespace SchoolProject.Core.Features.Authentication.Commands.Models
 {
-    public class AddUserCommand:IRequest<Result<string>>
+    public class RegistrationCommand:IRequest<Result<string>>
     {
         public string Email { get; set; }
         public string UserName { get; set; }
@@ -16,8 +16,5 @@ namespace SchoolProject.Core.Features.ApplicationUser.Commands.Models
         public string ConfirmPassword { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        
-        public IList<string> Roles { get; set; }
-
     }
 }

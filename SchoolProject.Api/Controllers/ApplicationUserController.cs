@@ -60,6 +60,13 @@ namespace SchoolProject.Api.Controllers
             return result.IsSuccess ?
               Ok(result) : result.ToProblem();
         }
-       
+        [HttpPut("ToggleStatues/{Id}")]
+        public async Task<IActionResult> ToggleStatues([FromRoute] string Id)
+        {
+            var result= await _mediator.Send(new ToggleStatusCommand(Id));
+            return result.IsSuccess ?
+             Ok(result) : result.ToProblem();
+        }
+
     }
 }

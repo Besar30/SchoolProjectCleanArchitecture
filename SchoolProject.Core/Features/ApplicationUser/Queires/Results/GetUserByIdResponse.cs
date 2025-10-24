@@ -13,5 +13,7 @@ namespace SchoolProject.Core.Features.ApplicationUser.Queires.Results
         public string LastName { get; set; }
         public string? Address { get; set; }
         public string? Country { get; set; }
+        public bool IsDisabled { get; set; }
+        public IEnumerable<string> Roles { get; set; }
     }
 }

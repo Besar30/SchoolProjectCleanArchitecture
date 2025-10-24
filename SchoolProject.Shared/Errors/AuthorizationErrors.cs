@@ -31,5 +31,9 @@ namespace SchoolProject.Shared.Errors
      "Roles.InvalidPermission",
      "Invalid Permission.",
      StatusCodes.Status400BadRequest);
+        public static readonly Error InvalidRoles = new(
+     "Roles.InvalidRole",
+     "Invalid Roles.",
+     StatusCodes.Status400BadRequest);
     }
 }

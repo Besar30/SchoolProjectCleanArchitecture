@@ -10,6 +10,7 @@ namespace SchoolProject.Data.Entites.Identity
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string? ImagePath { get; set; } = string.Empty;
+        public bool IsDisabled { get; set; }
         public virtual List<RefreshToken> refreshTokens { get; set; } = [];
     }
 }

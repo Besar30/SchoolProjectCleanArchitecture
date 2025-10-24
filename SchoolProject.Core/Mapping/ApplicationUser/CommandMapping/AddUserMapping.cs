@@ -14,7 +14,8 @@ namespace SchoolProject.Core.Mapping.ApplicationUser
     {
         public void AddUserMapping()
         {
-            CreateMap<AddUserCommand,User>();
+            CreateMap<AddUserCommand,User>()
+                .ForMember(des=>des.EmailConfirmed,opt=>opt.MapFrom(src=>true));
         }
     }
 }

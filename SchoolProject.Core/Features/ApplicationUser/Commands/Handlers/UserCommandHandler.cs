@@ -2,19 +2,27 @@
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using SchoolProject.Api.Const;
 using SchoolProject.Core.Features.ApplicationUser.Commands.Models;
 using SchoolProject.Data.Entites.Identity;
+using SchoolProject.Infrastructure.Data;
 using SchoolProject.Shared.Absractions;
 using SchoolProject.Shared.Errors;
+using System.Xml.Linq;
 namespace SchoolProject.Core.Features.ApplicationUser.Commands.Handlers
 {
-    public class UserCommandHandler(UserManager<User> userManager, IMapper mapper) : IRequestHandler<AddUserCommand, Result<string>>,
+    public class UserCommandHandler(UserManager<User> userManager, IMapper mapper,RoleManager<ApplicationRole> roleManager,ApplicationDBContext context) : IRequestHandler<AddUserCommand, Result<string>>,
                                                                                      IRequestHandler<EditUserCommand,Result<string>>,
                                                                                      IRequestHandler<DeleteUserCommand,Result<string>>,
-                                                                                     IRequestHandler<ChangePasswordUserCommand,Result<string>>
+                                                                                     IRequestHandler<ChangePasswordUserCommand,Result<string>>,
+                                                                                     IRequestHandler<ToggleStatusCommand,Result>
     {
         private readonly UserManager<User> _userManager = userManager;
         private readonly IMapper _mapper = mapper;
+        private readonly RoleManager<ApplicationRole> _roleManager = roleManager;
+        private readonly ApplicationDBContext _context = context;
+
         public async Task<Result<string>> Handle(AddUserCommand request, CancellationToken cancellationToken)
         {
             //check email is exist
@@ -25,34 +33,58 @@ namespace SchoolProject.Core.Features.ApplicationUser.Commands.Handlers
             var UserNameuser= await _userManager.FindByNameAsync(request.UserName);
             if(UserNameuser != null)
                 return Result.Failure<string>(UserErrors.UserNameAlreadyExists);
+            //check role is true 
+            var allowedRoles = await _roleManager.Roles.Where(x => !x.IsDefualt  && !x.IsDelete).ToListAsync();
+            if (request.Roles.Except(allowedRoles.Select(x => x.Name)).Any()){
+                return Result.Failure<string>(AuthorizationErrors.InvalidRoles);
+            }
             //mapping
             var UserIdentity = _mapper.Map<User>(request);
             //create
             var result = await _userManager.CreateAsync(UserIdentity, request.Password);
             //faild
-            if(!result.Succeeded)
-                return Result.Failure<string>(new Error( result.Errors.FirstOrDefault()!.Code, result.Errors.FirstOrDefault()!.Description,StatusCodes.Status409Conflict));
-            await _userManager.AddToRoleAsync(UserIdentity, "Member");
-            //secsess
-            return Result.Success($"User '{UserIdentity.UserName}' created successfully.");
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRolesAsync(UserIdentity,request.Roles);
+                //secsess
+                return Result.Success($"User '{UserIdentity.UserName}' created successfully.");
+            }
+            return Result.Failure<string>(new Error(result.Errors.FirstOrDefault()!.Code, result.Errors.FirstOrDefault()!.Description, StatusCodes.Status409Conflict));
+
         }
 
         public async Task<Result<string>> Handle(EditUserCommand request, CancellationToken cancellationToken)
         {
-            //check if user is exist
-            var oldUser = await _userManager.FindByIdAsync(request.Id);
-            //if not found
-            if (oldUser == null)
+            //check email is exist
+            var Emailuser = await _context.Users.AnyAsync(x => x.Email == request.Email && x.Id != request.Id);
+            if (Emailuser)
+                return Result.Failure<string>(UserErrors.EmailAlreadyExists);
+            //check username is exist
+            var UserNameuser = await _context.Users.AnyAsync(x => x.UserName == request.UserName && x.Id != request.Id);
+            if (UserNameuser)
+                return Result.Failure<string>(UserErrors.UserNameAlreadyExists);
+            //check role is true 
+            var allowedRoles = await _roleManager.Roles.Where(x => !x.IsDefualt && !x.IsDelete).ToListAsync();
+            if (request.Roles.Except(allowedRoles.Select(x => x.Name)).Any())
+                return Result.Failure<string>(AuthorizationErrors.InvalidRoles);
+            
+            //mapping
+            var user= await _userManager.FindByIdAsync(request.Id);
+            if(user==null)
                 return Result.Failure<string>(UserErrors.UserNotFound);
-           //mapping
-           var newUser= _mapper.Map(request,oldUser);
-            //update
-            var result = await _userManager.UpdateAsync(newUser);
-            //resutl not success
-            if (!result.Succeeded)
-                return Result.Failure<string>(new Error(result.Errors.FirstOrDefault()!.Code, result.Errors.FirstOrDefault()!.Description, StatusCodes.Status409Conflict));
-            //result success
-            return Result.Success($"User '{newUser.UserName}' Edited successfully.");
+
+             _mapper.Map(request,user);
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                await _context.UserRoles.Where(x => x.UserId == request.Id)
+                               .ExecuteDeleteAsync();
+                await _userManager.AddToRolesAsync(user, request.Roles);
+                return Result.Success("User updated successfully");
+            }
+            //faild
+            return Result.Failure<string>(new Error(result.Errors.FirstOrDefault()!.Code, result.Errors.FirstOrDefault()!.Description, StatusCodes.Status409Conflict));
+
         }
 
         public async Task<Result<string>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
@@ -74,6 +106,18 @@ namespace SchoolProject.Core.Features.ApplicationUser.Commands.Handlers
             if(!result.Succeeded)
                 return Result.Failure<string>(new Error(result.Errors.FirstOrDefault()!.Code, result.Errors.FirstOrDefault()!.Description, StatusCodes.Status409Conflict));
             return Result.Success("Password changed successfully");
+        }
+
+        public async Task<Result> Handle(ToggleStatusCommand request, CancellationToken cancellationToken)
+        {
+            var user = await _userManager.FindByIdAsync(request.Id);
+            if (user == null)
+                return Result.Failure(UserErrors.UserNotFound);
+            user.IsDisabled=!user.IsDisabled;
+            var result=await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+                return Result.Success();
+            return Result.Failure<string>(new Error(result.Errors.FirstOrDefault()!.Code, result.Errors.FirstOrDefault()!.Description, StatusCodes.Status400BadRequest));
         }
     }
 }
