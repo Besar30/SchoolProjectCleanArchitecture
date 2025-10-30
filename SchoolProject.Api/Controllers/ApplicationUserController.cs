@@ -1,12 +1,9 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SchoolProject.Api.Const;
 using SchoolProject.Core.Features.ApplicationUser.Commands.Models;
 using SchoolProject.Core.Features.ApplicationUser.Queires.Models;
-using SchoolProject.Core.Features.Students.Commands.Models;
 using SchoolProject.Core.pagination;
-using SchoolProject.Shared.Absractions;
 
 namespace SchoolProject.Api.Controllers
 {

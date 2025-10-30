@@ -20,9 +20,15 @@ namespace SchoolProject.Service
             services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
             services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
             services.AddSingleton<IJwtProvider, JwtProvider>();
-          //  services.Configure<JwtOptions>(configration.GetSection(JwtOptions.NameSection));
+            services.AddTransient<IEmailService, EmailService>();
+
+            //  services.Configure<JwtOptions>(configration.GetSection(JwtOptions.NameSection));
             services.AddOptions<JwtOptions>()
                 .BindConfiguration(JwtOptions.NameSection)
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+            services.AddOptions<EmailBinding>()
+                .BindConfiguration(EmailBinding.NameSection)
                 .ValidateDataAnnotations()
                 .ValidateOnStart();
             return services;

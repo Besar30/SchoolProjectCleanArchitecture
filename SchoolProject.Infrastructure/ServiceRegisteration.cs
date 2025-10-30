@@ -31,7 +31,9 @@
                    option.User.AllowedUserNameCharacters =
                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                    option.User.RequireUniqueEmail = true;
-               }).AddEntityFrameworkStores<ApplicationDBContext>().AddDefaultTokenProviders();
+                  // option.SignIn.RequireConfirmedEmail = true;
+               }).AddEntityFrameworkStores<ApplicationDBContext>()
+                 .AddDefaultTokenProviders();
                 return services;
             }
         }
