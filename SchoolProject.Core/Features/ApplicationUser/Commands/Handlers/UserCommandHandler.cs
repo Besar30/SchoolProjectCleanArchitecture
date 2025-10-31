@@ -9,19 +9,24 @@ using SchoolProject.Data.Entites.Identity;
 using SchoolProject.Infrastructure.Data;
 using SchoolProject.Shared.Absractions;
 using SchoolProject.Shared.Errors;
+using System.Security.Claims;
 using System.Xml.Linq;
 namespace SchoolProject.Core.Features.ApplicationUser.Commands.Handlers
 {
-    public class UserCommandHandler(UserManager<User> userManager, IMapper mapper,RoleManager<ApplicationRole> roleManager,ApplicationDBContext context) : IRequestHandler<AddUserCommand, Result<string>>,
-                                                                                     IRequestHandler<EditUserCommand,Result<string>>,
-                                                                                     IRequestHandler<DeleteUserCommand,Result<string>>,
-                                                                                     IRequestHandler<ChangePasswordUserCommand,Result<string>>,
-                                                                                     IRequestHandler<ToggleStatusCommand,Result>
+    public class UserCommandHandler(UserManager<User> userManager, IMapper mapper
+                                    ,RoleManager<ApplicationRole> roleManager
+                                    ,ApplicationDBContext context
+                                    ,IHttpContextAccessor httpContextAccessor):IRequestHandler<AddUserCommand, Result<string>>,
+                                                                               IRequestHandler<EditUserCommand,Result<string>>,
+                                                                               IRequestHandler<DeleteUserCommand,Result<string>>,
+                                                                               IRequestHandler<ChangePasswordUserCommand,Result<string>>,
+                                                                               IRequestHandler<ToggleStatusCommand,Result>
     {
         private readonly UserManager<User> _userManager = userManager;
         private readonly IMapper _mapper = mapper;
         private readonly RoleManager<ApplicationRole> _roleManager = roleManager;
         private readonly ApplicationDBContext _context = context;
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
         public async Task<Result<string>> Handle(AddUserCommand request, CancellationToken cancellationToken)
         {
@@ -50,7 +55,6 @@ namespace SchoolProject.Core.Features.ApplicationUser.Commands.Handlers
                 return Result.Success($"User '{UserIdentity.UserName}' created successfully.");
             }
             return Result.Failure<string>(new Error(result.Errors.FirstOrDefault()!.Code, result.Errors.FirstOrDefault()!.Description, StatusCodes.Status409Conflict));
-
         }
 
         public async Task<Result<string>> Handle(EditUserCommand request, CancellationToken cancellationToken)
@@ -93,6 +97,29 @@ namespace SchoolProject.Core.Features.ApplicationUser.Commands.Handlers
             var user = await _userManager.FindByIdAsync(request.Id);
             if (user == null)
                 return Result.Failure<string>(UserErrors.UserNotFound);
+           
+
+            var Roles = await _userManager.GetRolesAsync(user);
+            if (Roles.Contains("Admin"))
+            {
+                //check if admin remove him self
+                var currentUserId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (currentUserId == request.Id)
+                    return Result.Failure<string>(UserErrors.SelfDeleteNotAllowed);
+                //check is the last admin
+                var adminsCount = (await _userManager.GetUsersInRoleAsync("Admin")).Count;
+                if (adminsCount <= 1)
+                    return Result.Failure<string>(UserErrors.CanNotDeleteAdmin);
+                //if not last admin disable admin just
+                    user.IsDisabled = true;
+                var updateResult = await _userManager.UpdateAsync(user);
+                if (!updateResult.Succeeded)
+                    return Result.Failure<string>(
+                        new Error(updateResult.Errors.First().Code, updateResult.Errors.First().Description, StatusCodes.Status409Conflict)
+                    );
+                return Result.Success("Admins cannot be deleted. Admin has been disabled instead.");
+            }
             var result = await _userManager.DeleteAsync(user);
             if (!result.Succeeded)
                 return Result.Failure<string>(new Error(result.Errors.FirstOrDefault()!.Code, result.Errors.FirstOrDefault()!.Description, StatusCodes.Status409Conflict));

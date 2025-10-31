@@ -37,5 +37,11 @@ namespace SchoolProject.Api.Controllers
             var resutl = await _mediator.Send(command);
             return resutl.IsSuccess ? Ok(resutl) : resutl.ToProblem();
         }
+        [HttpGet("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmailAsync([FromQuery] ConfirmEmailCommand command)
+        {
+            var resutl = await _mediator.Send(command);
+            return resutl.IsSuccess ? Ok(resutl) : resutl.ToProblem();
+        }
     }
 }

@@ -20,11 +20,14 @@ namespace SchoolProject.Service.Implementation
                     await client.ConnectAsync(_options.Host, _options.Port, SecureSocketOptions.StartTls);// الاتصال بسيرفر Gmail
                     client.Authenticate(_options.Mail, _options.Password); // تسجيل الدخول بحساب Gmail
 
+                    var messageLink = $"<a href=\"{Messege}\">Click here to confirm your email</a>";
+
                     var bodybuilder = new BodyBuilder
                     {
-                        HtmlBody = $"{Messege}",
-                        TextBody = "Hi Welcome to Project School project"
+                        HtmlBody = messageLink,
+                        TextBody = Messege // لو فتح الإيميل كنص عادي
                     };
+
                     var message = new MimeMessage
                     {
                         Body = bodybuilder.ToMessageBody() // إضافة المحتوى للرسالة
@@ -41,6 +44,8 @@ namespace SchoolProject.Service.Implementation
                 return Result.Success();
             }
             catch (Exception ex) {
+                Console.WriteLine($"Email error: {ex}");
+
                 return Result.Failure(new Error("Email.SendError", ex.Message, StatusCodes.Status400BadRequest));
             }
 

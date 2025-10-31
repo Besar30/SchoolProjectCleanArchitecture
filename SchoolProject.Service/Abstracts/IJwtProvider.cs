@@ -11,5 +11,6 @@ namespace SchoolProject.Service.Abstracts
     {
         (string Token, int ExpiresIn) GenerateToken(User user,IEnumerable<string> roles, IEnumerable<string> permissions);
         string? ValidateToken(string token);
+
     }
 }

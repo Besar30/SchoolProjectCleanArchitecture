@@ -12,7 +12,7 @@ namespace SchoolProject.Infrastructure.Abstracts.Const
         public const string AdminEmail = "admin@SchoolSystem.com";
         public const string AdminUserName = "School-Project";
 
-        public const string AdminPassword = "asd123!A";
+        public const string AdminPassword = "Asd123!";
         public const string AdminSecurityStamp = "55BF92C9EF0249CDA210D85D1A851BC9";
         public const string AdminConcurrencyStamp = "0195442f-5b32-7594-8754-260776e9cdcc";
     }

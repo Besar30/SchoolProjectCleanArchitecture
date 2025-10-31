@@ -25,6 +25,14 @@ namespace SchoolProject.Shared.Errors
                                                         "User.Disabled",
                                                         "This user account is disabled.",
                                                         StatusCodes.Status403Forbidden);
+        public static readonly Error CanNotDeleteAdmin = new(
+                                                     "CanNotDeleteAdmin",
+                                                     "You cannot delete the last admin in the system.",
+                                                     StatusCodes.Status403Forbidden);
+        public static readonly Error SelfDeleteNotAllowed = new Error("SelfDeleteNotAllowed",
+                                                                    "Admins cannot delete their own account.",
+                                                                    StatusCodes.Status403Forbidden);
+
 
 
     }

@@ -22,5 +22,16 @@ namespace SchoolProject.Shared.Errors
         new("User.EmailAlreadyExists", "Email already exists", StatusCodes.Status400BadRequest);
         public static readonly Error UserNameAlreadyExists =
          new("User.UserNameAlreadyExists", " UserName already exists", StatusCodes.Status400BadRequest);
+        public static readonly Error EmailUserNotConfirmed = new(
+                                                      "EmailUser.NotConfirmed",
+                                                      "Email User Not Confirmed.",
+                                                      StatusCodes.Status400BadRequest);
+        public static readonly Error ConfirmEmail = new Error("Email.SendFailed",
+                          "User created but failed to send confirmation email. Please try again.",
+                          StatusCodes.Status500InternalServerError);
+        public static readonly Error InvalidEmailConfirmationToken = new Error(
+                                                                    "Auth.InvalidEmailConfirmationToken",
+                                                                    "The email confirmation token is invalid or expired.",
+                                                                    StatusCodes.Status400BadRequest);
     }
 }

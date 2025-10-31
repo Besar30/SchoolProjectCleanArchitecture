@@ -4,6 +4,7 @@ using SchoolProject.Api.Const;
 using SchoolProject.Core.Features.ApplicationUser.Commands.Models;
 using SchoolProject.Core.Features.ApplicationUser.Queires.Models;
 using SchoolProject.Core.pagination;
+using SchoolProject.Service.Abstracts.Filter;
 
 namespace SchoolProject.Api.Controllers
 {
@@ -30,6 +31,7 @@ namespace SchoolProject.Api.Controllers
         }
 
         [HttpPost("")]
+        [HasPermission(Permissions.DeleteUsers)]
         public async Task<IActionResult> Create([FromBody] AddUserCommand command)
         {
             var response = await _mediator.Send(command);

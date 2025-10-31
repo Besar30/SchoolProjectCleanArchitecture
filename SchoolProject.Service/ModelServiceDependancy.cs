@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -19,9 +22,18 @@ namespace SchoolProject.Service
             services.AddTransient<IAuthrizationServices, AuthrizationServices>();
             services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
             services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
+
+            services.AddTransient<IActionContextAccessor, ActionContextAccessor>();
+
             services.AddSingleton<IJwtProvider, JwtProvider>();
             services.AddTransient<IEmailService, EmailService>();
-
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IUrlHelper>(x =>
+            {
+                var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
+                var factory = x.GetRequiredService<IUrlHelperFactory>();
+                return factory.GetUrlHelper(actionContext);
+            });
             //  services.Configure<JwtOptions>(configration.GetSection(JwtOptions.NameSection));
             services.AddOptions<JwtOptions>()
                 .BindConfiguration(JwtOptions.NameSection)

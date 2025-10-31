@@ -2,6 +2,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using SchoolProject.Core.Features.Authentication.Commands.Models;
@@ -10,22 +12,29 @@ using SchoolProject.Data.Entites.Identity;
 using SchoolProject.Infrastructure.Abstracts.Const;
 using SchoolProject.Infrastructure.Data;
 using SchoolProject.Service.Abstracts;
+using SchoolProject.Service.Implementation;
 using SchoolProject.Shared.Absractions;
 using SchoolProject.Shared.Errors;
-
+using System.Net;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace SchoolProject.Core.Features.Authentication.Commands.Handlers
 {
-    public class AuthenticationCommandHandler(UserManager<User> userManager,IJwtProvider jwtProvider,ApplicationDBContext context, IMapper mapper) : IRequestHandler<SigninCommand, Result<SigninResponse>>,
+    public class AuthenticationCommandHandler(UserManager<User> userManager,IJwtProvider jwtProvider
+        ,ApplicationDBContext context, IMapper mapper,IHttpContextAccessor httpContextAccessor,IEmailService emailService,IUrlHelper urlHelper) : IRequestHandler<SigninCommand, Result<SigninResponse>>,
                                                                                                         IRequestHandler<GetRefreshTokenCommand,Result<SigninResponse>>,
                                                                                                         IRequestHandler<RevokeRefreshTokenCommand,Result<bool>>
-                                                                                                        ,IRequestHandler<RegistrationCommand,Result<string>>
+                                                                                                        ,IRequestHandler<RegistrationCommand,Result<string>>,
+                                                                                                          IRequestHandler<ConfirmEmailCommand,Result<string>>  
     {
         private readonly UserManager<User> _userManager = userManager;
         private readonly IJwtProvider _jwtProvider = jwtProvider;
         private readonly ApplicationDBContext _context = context;
         private readonly IMapper _mapper = mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+        private readonly IEmailService _emailService = emailService;
+        private readonly IUrlHelper _urlHelper = urlHelper;
         private readonly int _refreshTokenExpriyDays = 14;
 
         public async Task<Result<string>> Handle(RegistrationCommand request, CancellationToken cancellationToken)
@@ -41,6 +50,19 @@ namespace SchoolProject.Core.Features.Authentication.Commands.Handlers
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(UserIdentity, DefaultRoles.Member);
+                //send confirm email
+                var code= await _userManager.GenerateEmailConfirmationTokenAsync(UserIdentity);
+            //    var encodedCode = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
+                //create Link
+                var RequestAccessor = _httpContextAccessor.HttpContext!.Request;
+                var ReturnUrl = RequestAccessor.Scheme + "://" + RequestAccessor.Host + 
+                    _urlHelper.Action("ConfirmEmail", "Authentication", new { UserId = UserIdentity.Id, code = code });
+                   // $"/api/Authentication/ConfirmEmail?UserId={UserIdentity.Id}&code={code}";
+                //body
+                var resultOfConfirmEmail = await _emailService.SendMassege(UserIdentity.Email!, ReturnUrl);
+                if(!resultOfConfirmEmail.IsSuccess)
+                    return Result.Failure<string>(AuthenticationErrors.ConfirmEmail);
                 return Result.Success("User created successfully");
             }
             return Result.Failure<string>(new Error(result.Errors.FirstOrDefault()!.Code, result.Errors.FirstOrDefault()!.Description, StatusCodes.Status409Conflict));
@@ -58,6 +80,9 @@ namespace SchoolProject.Core.Features.Authentication.Commands.Handlers
             var IsValidPassword = await _userManager.CheckPasswordAsync(user,request.Password);
             if (!IsValidPassword)
                 return Result.Failure<SigninResponse>(UserErrors.InvalidCredentials);
+            //check email confirmed
+            if (!user.EmailConfirmed)
+                return Result.Failure<SigninResponse>(AuthenticationErrors.EmailUserNotConfirmed);
             // generate token
             var (userRoles, userPermissions) = await GetRolesAndPermissions(user, cancellationToken);
             var (token, expiresIn) = _jwtProvider.GenerateToken(user, userRoles, userPermissions);
@@ -112,6 +137,19 @@ namespace SchoolProject.Core.Features.Authentication.Commands.Handlers
             return Result.Success(true);
 
         }
+        public async Task<Result<string>> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken)
+        {
+            var user = await _userManager.FindByIdAsync(request.UserId);
+            if (user == null)
+                return Result.Failure<string>(UserErrors.UserNotFound);
+
+          //  var decodedCode = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.code));
+
+            var confirmEmail = await _userManager.ConfirmEmailAsync(user, request.code);
+            if (!confirmEmail.Succeeded)
+                return Result.Failure<string>(AuthenticationErrors.InvalidEmailConfirmationToken);
+            return Result.Success("Email confirmed successfully");
+        }
         private static string GenerateRefreshToken()
         {
             return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
@@ -124,6 +162,7 @@ namespace SchoolProject.Core.Features.Authentication.Commands.Handlers
             {
                 Id = user.Id,
                 Email = user.Email!,
+                UserName=user.UserName!,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Token = token,
@@ -152,5 +191,7 @@ namespace SchoolProject.Core.Features.Authentication.Commands.Handlers
                                      .ToListAsync(cancellationToken);
             return (userRoles, userPermissions);
         }
+
+       
     }
 }
