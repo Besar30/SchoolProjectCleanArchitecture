@@ -56,5 +56,17 @@ namespace SchoolProject.Api.Controllers
             var resutl = await _mediator.Send(command);
             return resutl.IsSuccess ? Ok(resutl) : resutl.ToProblem();
         }
+        [HttpPost("ConfirmResetPaswword")]
+        public async Task<IActionResult> ConfirmResetPaswword([FromQuery] ConfirmCodeRestPasswordCommand command)
+        {
+            var resutl = await _mediator.Send(command);
+            return resutl.IsSuccess ? Ok(resutl) : resutl.ToProblem();
+        }
+        [HttpPost("GetNewPaswword")]
+        public async Task<IActionResult> GetNewPaswword([FromQuery] ResetNewPasswordCommand command)
+        {
+            var resutl = await _mediator.Send(command);
+            return resutl.IsSuccess ? Ok(resutl) : resutl.ToProblem();
+        }
     }
 }

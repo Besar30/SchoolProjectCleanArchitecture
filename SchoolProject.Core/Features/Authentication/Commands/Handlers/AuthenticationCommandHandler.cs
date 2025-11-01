@@ -28,7 +28,9 @@ namespace SchoolProject.Core.Features.Authentication.Commands.Handlers
                                                                                                         IRequestHandler<RevokeRefreshTokenCommand,Result<bool>>
                                                                                                         ,IRequestHandler<RegistrationCommand,Result<string>>,
                                                                                                           IRequestHandler<ConfirmEmailCommand,Result<string>>,
-                                                                                                           IRequestHandler<ResetPasswordCommand,Result<string>>
+                                                                                                           IRequestHandler<ResetPasswordCommand,Result<string>>,
+                                                                                                           IRequestHandler<ConfirmCodeRestPasswordCommand,Result<string>>
+                                                                                                           ,IRequestHandler<ResetNewPasswordCommand,Result<string>>
                                                                                                           
     {
         private readonly UserManager<User> _userManager = userManager;
@@ -160,6 +162,18 @@ namespace SchoolProject.Core.Features.Authentication.Commands.Handlers
             return result.IsSuccess ?
                 Result.Success("Reset Code has been sent successfully.") : Result.Failure<string>(result.error);
         }
+        public async Task<Result<string>> Handle(ConfirmCodeRestPasswordCommand request, CancellationToken cancellationToken)
+        {
+            var result = await _userService.ResetPasswordConfirmationService(request.Email, request.Code);
+            return result.IsSuccess ?
+                Result.Success("Code confirmed successfully. You can now reset your password.") : Result.Failure<string>(result.error);
+        }
+        public async Task<Result<string>> Handle(ResetNewPasswordCommand request, CancellationToken cancellationToken)
+        {
+           var result= await _userService.ResetPasswordConfirmationConfirmationService(request.Email,request.NewPassword,request.ConfirmPassword);
+            return result.IsSuccess ?
+                           Result.Success("Password reset successfully.") : Result.Failure<string>(result.error);
+        }
         private static string GenerateRefreshToken()
         {
             return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
@@ -202,6 +216,6 @@ namespace SchoolProject.Core.Features.Authentication.Commands.Handlers
             return (userRoles, userPermissions);
         }
 
-     
+
     }
 }

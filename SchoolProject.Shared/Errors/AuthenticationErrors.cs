@@ -33,5 +33,22 @@ namespace SchoolProject.Shared.Errors
                                                                     "Auth.InvalidEmailConfirmationToken",
                                                                     "The email confirmation token is invalid or expired.",
                                                                     StatusCodes.Status400BadRequest);
+        public static readonly Error ResetCodeExpired = new Error(
+                                                                "Auth.ResetCodeExpired",
+                                                                "The reset password code has expired. Please request a new code.",
+                                                                StatusCodes.Status400BadRequest);
+        public static readonly Error ResetCodeAlreadyUsed = new Error(
+                                                                        "Auth.ResetCodeAlreadyUsed",
+                                                                        "This reset password code has already been used. Please request a new code.",
+                                                                        StatusCodes.Status400BadRequest);
+        public static readonly Error InvalidResetCode = new Error(
+                                                              "Auth.InvalidResetCode",
+                                                              "The reset password code is invalid. Please check the code and try again.",
+                                                              StatusCodes.Status400BadRequest);
+        public static readonly Error PasswordMismatch = new Error(
+                                                            "PasswordMismatch",
+                                                            "The new password and confirmation password do not match.",
+                                                            StatusCodes.Status400BadRequest);
+
     }
 }

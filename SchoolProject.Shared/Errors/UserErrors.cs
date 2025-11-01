@@ -37,7 +37,9 @@ namespace SchoolProject.Shared.Errors
                                                                 "EmailAlreadyConfirmed",
                                                                 "This email is already confirmed.",
                                                                 StatusCodes.Status400BadRequest);
-
-
+        public static readonly Error InvalidResetCode = new Error(
+                                                                "Auth.InvalidResetCode",
+                                                                "The reset password code is invalid. Please check the code and try again.",
+                                                                StatusCodes.Status400BadRequest);
     }
 }
