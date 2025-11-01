@@ -9,5 +9,7 @@ namespace SchoolProject.Service.Abstracts
 {
     public interface IUserService
     {
+        public Task<Result> ResetConfirmEmailService(string email);
+        public Task<Result> ResetPasswordService(string email);
     }
 }

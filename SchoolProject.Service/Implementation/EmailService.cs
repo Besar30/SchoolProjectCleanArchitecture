@@ -11,7 +11,7 @@ namespace SchoolProject.Service.Implementation
     {
         private readonly EmailBinding _options = _options.Value;
 
-        public async Task<Result> SendMassege(string Email, string Messege)
+        public async Task<Result> SendMassege(string Email, string Messege, string? reason)
         {
             try
             {
@@ -24,7 +24,7 @@ namespace SchoolProject.Service.Implementation
 
                     var bodybuilder = new BodyBuilder
                     {
-                        HtmlBody = messageLink,
+                        HtmlBody = Messege,
                         TextBody = Messege // لو فتح الإيميل كنص عادي
                     };
 
@@ -36,7 +36,7 @@ namespace SchoolProject.Service.Implementation
                     message.From.Add(new MailboxAddress(_options.DisplayName, _options.Mail)); // من
                     message.To.Add(new MailboxAddress("testing", Email)); // إلى
 
-                    message.Subject = "new Contact Submitted Data"; // العنوان
+                    message.Subject = reason==null?"No Submitted":reason; // العنوان
 
                     await client.SendAsync(message); // إرسال الإيميل
                     client.Disconnect(true); // إنهاء الاتصال بالسيرفر

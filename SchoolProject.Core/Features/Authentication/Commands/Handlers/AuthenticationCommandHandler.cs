@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using SchoolProject.Core.Features.Authentication.Commands.Models;
 using SchoolProject.Core.Features.Authentication.Commands.Results;
+using SchoolProject.Core.Features.Authentication.Queires.Models;
 using SchoolProject.Data.Entites.Identity;
 using SchoolProject.Infrastructure.Abstracts.Const;
 using SchoolProject.Infrastructure.Data;
@@ -22,11 +23,13 @@ using System.Text;
 namespace SchoolProject.Core.Features.Authentication.Commands.Handlers
 {
     public class AuthenticationCommandHandler(UserManager<User> userManager,IJwtProvider jwtProvider
-        ,ApplicationDBContext context, IMapper mapper,IHttpContextAccessor httpContextAccessor,IEmailService emailService,IUrlHelper urlHelper) : IRequestHandler<SigninCommand, Result<SigninResponse>>,
+        ,ApplicationDBContext context, IMapper mapper,IHttpContextAccessor httpContextAccessor,IEmailService emailService,IUrlHelper urlHelper,IUserService userService) : IRequestHandler<SigninCommand, Result<SigninResponse>>,
                                                                                                         IRequestHandler<GetRefreshTokenCommand,Result<SigninResponse>>,
                                                                                                         IRequestHandler<RevokeRefreshTokenCommand,Result<bool>>
                                                                                                         ,IRequestHandler<RegistrationCommand,Result<string>>,
-                                                                                                          IRequestHandler<ConfirmEmailCommand,Result<string>>  
+                                                                                                          IRequestHandler<ConfirmEmailCommand,Result<string>>,
+                                                                                                           IRequestHandler<ResetPasswordCommand,Result<string>>
+                                                                                                          
     {
         private readonly UserManager<User> _userManager = userManager;
         private readonly IJwtProvider _jwtProvider = jwtProvider;
@@ -35,6 +38,7 @@ namespace SchoolProject.Core.Features.Authentication.Commands.Handlers
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly IEmailService _emailService = emailService;
         private readonly IUrlHelper _urlHelper = urlHelper;
+        private readonly IUserService _userService = userService;
         private readonly int _refreshTokenExpriyDays = 14;
 
         public async Task<Result<string>> Handle(RegistrationCommand request, CancellationToken cancellationToken)
@@ -55,12 +59,12 @@ namespace SchoolProject.Core.Features.Authentication.Commands.Handlers
             //    var encodedCode = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 
                 //create Link
-                var RequestAccessor = _httpContextAccessor.HttpContext!.Request;
+                var RequestAccessor = _httpContextAccessor.HttpContext.Request;
                 var ReturnUrl = RequestAccessor.Scheme + "://" + RequestAccessor.Host + 
                     _urlHelper.Action("ConfirmEmail", "Authentication", new { UserId = UserIdentity.Id, code = code });
                    // $"/api/Authentication/ConfirmEmail?UserId={UserIdentity.Id}&code={code}";
                 //body
-                var resultOfConfirmEmail = await _emailService.SendMassege(UserIdentity.Email!, ReturnUrl);
+                var resultOfConfirmEmail = await _emailService.SendMassege(UserIdentity.Email!, ReturnUrl, "Confirm Your Email");
                 if(!resultOfConfirmEmail.IsSuccess)
                     return Result.Failure<string>(AuthenticationErrors.ConfirmEmail);
                 return Result.Success("User created successfully");
@@ -150,6 +154,12 @@ namespace SchoolProject.Core.Features.Authentication.Commands.Handlers
                 return Result.Failure<string>(AuthenticationErrors.InvalidEmailConfirmationToken);
             return Result.Success("Email confirmed successfully");
         }
+        public async Task<Result<string>> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
+        {
+            var result = await _userService.ResetPasswordService(request.Email);
+            return result.IsSuccess ?
+                Result.Success("Reset Code has been sent successfully.") : Result.Failure<string>(result.error);
+        }
         private static string GenerateRefreshToken()
         {
             return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
@@ -192,6 +202,6 @@ namespace SchoolProject.Core.Features.Authentication.Commands.Handlers
             return (userRoles, userPermissions);
         }
 
-       
+     
     }
 }

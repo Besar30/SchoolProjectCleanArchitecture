@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolProject.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using SchoolProject.Infrastructure.Data;
 namespace SchoolProject.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20251031205747_addcodeencryptcolumn")]
+    partial class addcodeencryptcolumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -456,12 +459,6 @@ namespace SchoolProject.Infrastructure.Migrations
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("CodeExpireAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("CodeIsUsed")
-                        .HasColumnType("bit");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -541,7 +538,6 @@ namespace SchoolProject.Infrastructure.Migrations
                             Id = "0195442f-5b32-7163-9117-b7023daacb2d",
                             AccessFailedCount = 0,
                             Address = "",
-                            CodeIsUsed = false,
                             ConcurrencyStamp = "0195442f-5b32-7594-8754-260776e9cdcc",
                             Country = "",
                             Email = "admin@SchoolSystem.com",

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SchoolProject.Api.Const;
 using SchoolProject.Core.Features.Authentication.Commands.Models;
+using SchoolProject.Core.Features.Authentication.Queires.Models;
 
 namespace SchoolProject.Api.Controllers
 {
@@ -39,6 +40,18 @@ namespace SchoolProject.Api.Controllers
         }
         [HttpGet("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmailAsync([FromQuery] ConfirmEmailCommand command)
+        {
+            var resutl = await _mediator.Send(command);
+            return resutl.IsSuccess ? Ok(resutl) : resutl.ToProblem();
+        }
+        [HttpPost("ResetConfirmEmail")]
+        public async Task<IActionResult> ResetConfirmEmail([FromQuery]  ResetConfirmEmailQuery query)
+        {
+            var resutl = await _mediator.Send(query);
+            return resutl.IsSuccess ? Ok(resutl) : resutl.ToProblem();
+        }
+        [HttpPost("ResetPaswword")]
+        public async Task<IActionResult> ResetPaswword([FromQuery] ResetPasswordCommand command)
         {
             var resutl = await _mediator.Send(command);
             return resutl.IsSuccess ? Ok(resutl) : resutl.ToProblem();

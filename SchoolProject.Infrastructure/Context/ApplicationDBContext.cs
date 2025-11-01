@@ -1,13 +1,18 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using EntityFrameworkCore.EncryptColumn.Extension;
+using EntityFrameworkCore.EncryptColumn.Interfaces;
+using EntityFrameworkCore.EncryptColumn.Util;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SchoolProject.Data.Entites;
 using SchoolProject.Data.Entites.Identity;
 using System.Reflection;
+using System.Reflection.Metadata.Ecma335;
 
 namespace SchoolProject.Infrastructure.Data
 {
     public class ApplicationDBContext:IdentityDbContext<User,ApplicationRole,string>
     {
+        private readonly IEncryptionProvider _encryptionProvider;
         public DbSet<User> User { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<DepartmetSubject> DepartmetSubjects { get; set; }
@@ -21,11 +26,13 @@ namespace SchoolProject.Infrastructure.Data
         public DbSet<Ins_Subject> ins_subjects { get; set; }
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
         {
-
+            _encryptionProvider = new GenerateEncryptionProvider("713c4c4aa4f7430e973c264926219e37");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+
+         modelBuilder.UseEncryption(_encryptionProvider);
+
             modelBuilder.Entity<DepartmetSubject>()
                 .HasKey(x => new{x.SubID, x.DID});
 

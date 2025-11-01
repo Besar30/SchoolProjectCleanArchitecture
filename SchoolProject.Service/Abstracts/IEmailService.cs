@@ -9,6 +9,6 @@ namespace SchoolProject.Service.Abstracts
 {
     public interface IEmailService
     {
-        Task<Result> SendMassege(string Email, string Messege);
+        Task<Result> SendMassege(string Email, string Messege,string? reason);
     }
 }

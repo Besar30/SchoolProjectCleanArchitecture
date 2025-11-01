@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using EntityFrameworkCore.EncryptColumn.Attribute;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolProject.Data.Entites.Identity
@@ -11,6 +12,10 @@ namespace SchoolProject.Data.Entites.Identity
         public string LastName { get; set; } = string.Empty;
         public string? ImagePath { get; set; } = string.Empty;
         public bool IsDisabled { get; set; }
+        [EncryptColumn]
+        public string? Code { get; set; }
+        public DateTime? CodeExpireAt { get; set; }
+        public bool CodeIsUsed { get; set; } = false;
         public virtual List<RefreshToken> refreshTokens { get; set; } = [];
     }
 }

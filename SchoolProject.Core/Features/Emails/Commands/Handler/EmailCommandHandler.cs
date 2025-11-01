@@ -24,7 +24,7 @@ namespace SchoolProject.Core.Features.Emails.Commands.Handler
             var EmailIsExist= await _userManager.FindByEmailAsync(request.Email);
             if (EmailIsExist == null)
                 return Result.Failure<string>(UserErrors.UserNotFound);
-            var result = await _emailService.SendMassege(request.Email, request.Massege);
+            var result = await _emailService.SendMassege(request.Email, request.Massege,null);
             if (result.IsSuccess)
                 return Result.Success("Massege sented.");
             return Result.Failure<string>(

@@ -33,6 +33,10 @@ namespace SchoolProject.Shared.Errors
                                                                     "Admins cannot delete their own account.",
                                                                     StatusCodes.Status403Forbidden);
 
+        public static readonly Error EmailAlreadyConfirmed = new(
+                                                                "EmailAlreadyConfirmed",
+                                                                "This email is already confirmed.",
+                                                                StatusCodes.Status400BadRequest);
 
 
     }
