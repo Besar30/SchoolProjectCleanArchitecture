@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SchoolProject.Core;
+using SchoolProject.Core.Filters;
 using SchoolProject.Data.Entites.Identity;
 using SchoolProject.Infrastructure;
 using SchoolProject.Infrastructure.Data;
@@ -87,6 +88,7 @@ builder.Services.AddCors(options => options.AddPolicy(name: Cors,
     }
     ));
 #endregion
+builder.Services.AddTransient<AuthFilter>();
 var app = builder.Build();
 //#endregion
 // Configure the HTTP request pipeline.

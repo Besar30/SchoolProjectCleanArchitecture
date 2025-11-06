@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using SchoolProject.Api.Const;
 using SchoolProject.Core.Features.Students.Commands.Models;
 using SchoolProject.Core.Features.Students.Queires.Models;
+using SchoolProject.Core.Filters;
 using SchoolProject.Core.pagination;
 using SchoolProject.Infrastructure.Abstracts.Const;
 using SchoolProject.Service.Abstracts.Filter;
@@ -16,7 +17,6 @@ namespace SchoolProject.Api.Controllers
     [ApiController]
     [Authorize(Roles =DefaultRoles.Admin)]
     //[HasPermission(Permissions.GetStudents)]
-
     public class StudentController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
@@ -56,6 +56,7 @@ namespace SchoolProject.Api.Controllers
                     Ok(result.Value) : result.ToProblem();
         }
         [HttpDelete("{Id}")]
+       // [ServiceFilter(typeof(AuthFilter))]
         public async Task<IActionResult> DeleteStudentAsync([FromRoute] int Id)
         {
             var result =await _mediator.Send(new DeleteStudentRequest(Id));

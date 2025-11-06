@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using SchoolProject.Service.Abstracts;
 using SchoolProject.Service.Abstracts.Filter;
+using SchoolProject.Service.AuthServices.Implementations;
+using SchoolProject.Service.AuthServices.Interfaces;
 using SchoolProject.Service.Implementation;
 using System.Net;
 using System.Text;
@@ -24,6 +26,7 @@ namespace SchoolProject.Service
             services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
 
             services.AddTransient<IActionContextAccessor, ActionContextAccessor>();
+            services.AddTransient<ICurrentUserServices, CurrentUserServices>();
 
             services.AddSingleton<IJwtProvider, JwtProvider>();
             services.AddTransient<IEmailService, EmailService>();
