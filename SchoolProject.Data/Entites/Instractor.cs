@@ -26,6 +26,7 @@ namespace SchoolProject.Data.Entites
         public int? SupervisorId { get; set; }
         public decimal? Salary { get; set; }
         public int? DID { get; set; }
+        public string? Image {  get; set; }
 
         [ForeignKey(nameof(DID))]
         [InverseProperty("instractors")]

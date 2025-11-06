@@ -25,7 +25,9 @@
 
   <ItemGroup>
     <Folder Include="Features\Departments\Commands\" />
+    <Folder Include="Features\Instractors\Queries\" />
     <Folder Include="Mapping\Authorization\CommandMapping\" />
+    <Folder Include="Mapping\Instracotors\QueryMapping\" />
   </ItemGroup>
 
   <ItemGroup>

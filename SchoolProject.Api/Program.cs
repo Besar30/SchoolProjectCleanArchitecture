@@ -6,7 +6,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SchoolProject.Core;
 using SchoolProject.Core.Filters;
-using SchoolProject.Data.Entites.Identity;
 using SchoolProject.Infrastructure;
 using SchoolProject.Infrastructure.Data;
 using SchoolProject.Service;
@@ -97,6 +96,7 @@ if (app.Environment.IsDevelopment())
         app.UseSwagger();
         app.UseSwaggerUI();
     }
+app.UseStaticFiles();
 app.UseRouting();
 app.UseCors(Cors);
 #region localization middelware
