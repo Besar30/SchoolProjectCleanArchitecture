@@ -52,7 +52,7 @@ namespace SchoolProject.Service.Implementation
                 return Result.Failure<string>(InstractorErrors.SupervisorCannotBeSelf);
 
             var superVisorIsExist = await _instractorRepository.SuperVisorToInstractorIsExist(instructor.SupervisorId);
-            if (superVisorIsExist == false)
+            if (superVisorIsExist == false&&instructor.SupervisorId!=null)
                 return Result.Failure<string>(InstractorErrors.SupervisorNotFound);
 
             var pathImage = await _fileService.UploadImage("Instractors", fileImage);
