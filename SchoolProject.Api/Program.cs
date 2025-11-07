@@ -10,13 +10,13 @@ using SchoolProject.Infrastructure;
 using SchoolProject.Infrastructure.Data;
 using SchoolProject.Service;
 using SchoolProject.Service.Implementation;
+using Serilog;
 using System.Globalization;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -88,6 +88,11 @@ builder.Services.AddCors(options => options.AddPolicy(name: Cors,
     ));
 #endregion
 builder.Services.AddTransient<AuthFilter>();
+#region SeriLog
+builder.Host.UseSerilog((context, configration) =>
+     configration.ReadFrom.Configuration(context.Configuration)
+);
+#endregion
 var app = builder.Build();
 //#endregion
 // Configure the HTTP request pipeline.
@@ -96,6 +101,8 @@ if (app.Environment.IsDevelopment())
         app.UseSwagger();
         app.UseSwaggerUI();
     }
+app.UseSerilogRequestLogging();
+
 app.UseStaticFiles();
 app.UseRouting();
 app.UseCors(Cors);
