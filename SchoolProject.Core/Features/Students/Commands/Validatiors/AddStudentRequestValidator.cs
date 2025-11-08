@@ -20,6 +20,9 @@ namespace SchoolProject.Core.Features.Students.Commands.Validatiors
             RuleFor(x => x.phone)
                 .NotEmpty().WithMessage("Phone is required.")
                 .Matches(@"^\d{11}$").WithMessage("Phone must be 11 digits.");
+            RuleFor(x => x.DID)
+                .NotNull()
+                .NotEmpty();
 
         }
     }

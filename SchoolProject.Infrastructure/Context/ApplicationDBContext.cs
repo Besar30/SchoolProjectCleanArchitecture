@@ -26,6 +26,7 @@ namespace SchoolProject.Infrastructure.Data
         public DbSet<Ins_Subject> ins_subjects { get; set; }
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
         {
+            //should key 32 char =128-bit
             _encryptionProvider = new GenerateEncryptionProvider("713c4c4aa4f7430e973c264926219e37");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -12,8 +12,10 @@ namespace SchoolProject.Core.Features.ApplicationUser.Commands.Validators
     {
         public AddUserValidator() {
             RuleFor(x => x.Email)
-           .NotEmpty().WithMessage("Email is required.")
-           .EmailAddress().WithMessage("Invalid email format.");
+                            .NotEmpty().WithMessage("Email is required.")
+                            .EmailAddress().WithMessage("Invalid email format.")
+                            .Matches(@"^[^\s]+@[^\s]+\.[^\s]+$").WithMessage("Email cannot contain spaces.");
+
 
             RuleFor(x => x.UserName)
                 .NotEmpty().WithMessage("Username is required.")

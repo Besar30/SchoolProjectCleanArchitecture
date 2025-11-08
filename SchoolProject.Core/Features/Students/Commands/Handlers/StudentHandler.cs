@@ -5,21 +5,25 @@ using Microsoft.Extensions.Localization;
 using SchoolProject.Core.Features.Students.Commands.Models;
 using SchoolProject.Core.Resources;
 using SchoolProject.Data.Entites;
+using SchoolProject.Infrastructure.Abstracts;
 using SchoolProject.Service.Abstracts;
 using SchoolProject.Shared.Absractions;
+using SchoolProject.Shared.Errors;
 
 namespace SchoolProject.Core.Features.Students.Commands.Handlers
 {
-    public class StudentHandler(IMapper mapper, IStudentService studentService,IStringLocalizer<SharedResources> stringLocalizer) : IRequestHandler<AddStudentRequest, Result<string>>,
+    public class StudentHandler(IMapper mapper, IStudentService studentService,IStringLocalizer<SharedResources> stringLocalizer,IDepartmentService departmentService) : IRequestHandler<AddStudentRequest, Result<string>>,
                                                                                                                                        IRequestHandler<EditStudentRequest, Result<string>>,
                                                                                                                                        IRequestHandler<DeleteStudentRequest,Result<string>>
     {
         private readonly IMapper _mapper = mapper;
         private readonly IStudentService _studentService = studentService;
         private readonly IStringLocalizer<SharedResources> _stringLocalizer = stringLocalizer;
+        private readonly IDepartmentService _departmentService = departmentService;
 
         public async Task<Result<string>> Handle(AddStudentRequest request, CancellationToken cancellationToken)
         {
+
             //convert StudentRequst to Student
             var student = _mapper.Map<Student>(request);
             var response = await _studentService.AddStudentAsync(student);
@@ -36,6 +40,10 @@ namespace SchoolProject.Core.Features.Students.Commands.Handlers
           var NameIsFound= await _studentService.NameIsFoundExcludeSelf(request.NameAr, request.Id);
             if(NameIsFound.isFailure)
                 return Result.Failure<string>(NameIsFound.error);
+            //check department is exist
+            var depaertmentIsExist= await _departmentService.GetDeparmentById(request.DepartmetName);
+            if (depaertmentIsExist == null)
+                return Result.Failure<string>(DepartmentErrors.DepartmentNotFound);
             //Mapping 
             var student = StudentIsExist.Value;
             _mapper.Map(request, student);

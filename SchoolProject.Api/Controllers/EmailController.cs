@@ -1,13 +1,17 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SchoolProject.Api.Const;
 using SchoolProject.Core.Features.Emails.Commands.Models;
+using SchoolProject.Infrastructure.Abstracts.Const;
 
 namespace SchoolProject.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = DefaultRoles.Admin)]
+
     public class EmailController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;

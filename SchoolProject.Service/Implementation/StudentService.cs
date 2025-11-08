@@ -30,14 +30,10 @@ namespace SchoolProject.Service.Implementation
             var NameStudentIsFound= await _studentRepository.CheckStudentFound(student.NameAr);
             if (NameStudentIsFound ==true)
                 return Result.Failure<string>(StudentErrors.NameStudentDuplicated);
-
-            if (student.DID == null)
-                return Result.Failure<string>(DepartmentErrors.DepartmentNotFound);
-
             var DepartmentIsFound = await _departmentRepository.DepartmentISFound(student.DID.Value);
             if (!DepartmentIsFound)
                 return Result.Failure<string>(DepartmentErrors.DepartmentNotFound);
-
+            
             await _studentRepository.AddStudentAsync(student);
             return Result.Success("Student Added");
         }

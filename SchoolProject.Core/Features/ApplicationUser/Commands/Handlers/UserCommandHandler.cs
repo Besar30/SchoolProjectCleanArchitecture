@@ -39,7 +39,7 @@ namespace SchoolProject.Core.Features.ApplicationUser.Commands.Handlers
             if(UserNameuser != null)
                 return Result.Failure<string>(UserErrors.UserNameAlreadyExists);
             //check role is true 
-            var allowedRoles = await _roleManager.Roles.Where(x => !x.IsDefualt  && !x.IsDelete).ToListAsync();
+            var allowedRoles = await _roleManager.Roles.Where( x=>!x.IsDelete).ToListAsync();
             if (request.Roles.Except(allowedRoles.Select(x => x.Name)).Any()){
                 return Result.Failure<string>(AuthorizationErrors.InvalidRoles);
             }

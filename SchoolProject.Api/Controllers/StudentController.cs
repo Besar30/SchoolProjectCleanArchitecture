@@ -16,11 +16,12 @@ namespace SchoolProject.Api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles =DefaultRoles.Admin)]
-    //[HasPermission(Permissions.GetStudents)]
     public class StudentController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
         [HttpGet("")]
+        [HasPermission(Permissions.GetStudents)]
+
         public async Task<IActionResult> GetStudent([FromQuery] RequestFilters filters)
         {
             var result = await _mediator.Send(new GetStudentListQuery
@@ -33,6 +34,8 @@ namespace SchoolProject.Api.Controllers
                 : result.ToProblem();
         }
         [HttpGet("{Id}")]
+        [HasPermission(Permissions.GetStudents)]
+
         public async Task<IActionResult> GetStudentById([FromRoute] int Id)
         {
             var result= await _mediator.Send(new GetStudentByIdQuery(Id));
@@ -41,6 +44,8 @@ namespace SchoolProject.Api.Controllers
                 result.ToProblem();
         }
         [HttpPost("")]
+        [HasPermission(Permissions.AddStudent)]
+
         public async Task<IActionResult> AddStudentAsync([FromBody] AddStudentRequest request)
         {
             var result = await _mediator.Send(request);
@@ -49,6 +54,8 @@ namespace SchoolProject.Api.Controllers
         }
 
         [HttpPut("")]
+        [HasPermission(Permissions.UpdateStudent)]
+
         public async Task<IActionResult> EditStudentAsync([FromBody] EditStudentRequest request)
         {
                 var result = await _mediator.Send(request);
@@ -56,7 +63,8 @@ namespace SchoolProject.Api.Controllers
                     Ok(result.Value) : result.ToProblem();
         }
         [HttpDelete("{Id}")]
-       // [ServiceFilter(typeof(AuthFilter))]
+        // [ServiceFilter(typeof(AuthFilter))]
+        [HasPermission(Permissions.DeleteStudent)]
         public async Task<IActionResult> DeleteStudentAsync([FromRoute] int Id)
         {
             var result =await _mediator.Send(new DeleteStudentRequest(Id));
