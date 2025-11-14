@@ -25,6 +25,8 @@ namespace SchoolProject.Shared.Errors
         "Supervisor cannot be the same as the instructor.",
         StatusCodes.Status400BadRequest
     );
+        public readonly static Error InstructorNotFound =
+    new Error("Instructor.NotFound", "Instructor not found.", StatusCodes.Status404NotFound);
 
     }
 }

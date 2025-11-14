@@ -11,6 +11,7 @@ namespace SchoolProject.Core.Mapping.Instracotors
     {
         public InstractroProfile() {
             AddInstractorMapping();
+            GetInstractorByIdMapping();
         }
     }
 }

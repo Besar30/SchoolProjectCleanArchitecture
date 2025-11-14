@@ -45,5 +45,20 @@ namespace SchoolProject.Infrastructure.Reposatories
         {
             return await _context.instractors.AnyAsync(x => x.InsId == id );
         }
+        public async Task<bool> InstractorIsExist(int Id)
+        {
+            return await _context.instractors.AnyAsync(x=>x.InsId==Id);
+        }
+
+        public async Task<Instractor> GetInstructorById(int Id)
+        {
+           var respone= await _context.instractors.Where(x=>x.InsId == Id)
+                                                  .Include(x=>x.Ins_Subjects).ThenInclude(x=>x.subject)
+                                                  .SingleOrDefaultAsync();
+            return respone;
+                                                  
+        }
+
+       
     }
 }

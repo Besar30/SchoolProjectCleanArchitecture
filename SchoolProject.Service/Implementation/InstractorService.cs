@@ -68,6 +68,14 @@ namespace SchoolProject.Service.Implementation
             }
         }
 
-
+        public async Task<Result<Instractor>> GetInstractorById(int id)
+        {
+            //instractor is Exist
+           var InstractorIsExsit = await _instractorRepository.InstractorIsExist(id);
+            if (!InstractorIsExsit)
+                return Result.Failure<Instractor>(InstractorErrors.InstructorNotFound);
+            var result= await _instractorRepository.GetInstructorById(id);
+            return Result.Success(result);
+        }
     }
 }

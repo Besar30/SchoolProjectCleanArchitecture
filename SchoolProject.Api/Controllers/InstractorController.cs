@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SchoolProject.Api.Const;
 using SchoolProject.Core.Features.Instractors.Commands.Models;
+using SchoolProject.Core.Features.Instractors.Queries.Models;
 using SchoolProject.Infrastructure.Abstracts.Const;
 using SchoolProject.Service.Abstracts.Filter;
 
@@ -15,6 +16,15 @@ namespace SchoolProject.Api.Controllers
     public class InstractorController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
+
+
+        [HttpGet("/Get-Instructor-By-Id/{Id}")]
+        public async Task<IActionResult>GetInstractoByIdAsyc(int Id)
+        {
+            var result = await _mediator.Send(new GetInstractorByIdQuery(Id));
+            return result.IsSuccess?
+                Ok(result) : result.ToProblem();
+        }
 
         [HttpPost("Add-Insturctor")]
         [HasPermission(Permissions.AddInstructor)]
