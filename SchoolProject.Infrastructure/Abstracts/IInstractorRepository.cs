@@ -17,7 +17,7 @@ namespace SchoolProject.Infrastructure.Abstracts
         public Task AddInstractorAsync(Instractor instractor);
         public Task<Instractor> GetInstructorById(int Id);
         public Task<bool> InstractorIsExist(int Id);
-
+        public Task UpdateInstractorAsync(Instractor instractor);
 
     }
 }

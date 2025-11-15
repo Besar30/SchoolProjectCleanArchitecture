@@ -15,6 +15,10 @@ namespace SchoolProject.Core.Features.Instractors.Queries.Responses
         public string? Address { get; set; }
         public int? Salary { get; set; }
         public string? ImageFile { get; set; }
+        public string? InstractorWorkForDepartmentName { get; set; }
+        public string? InstractorManageForDepartmentName { get; set; }
+        public string Position { get; set; }
+        public string Supervied { get; set; }
         public List<SubjectResponse>? Subjects {  get; set; }
     }
     public class SubjectResponse

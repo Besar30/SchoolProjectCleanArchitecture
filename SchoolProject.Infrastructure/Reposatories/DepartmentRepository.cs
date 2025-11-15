@@ -14,7 +14,7 @@ namespace SchoolProject.Infrastructure.Reposatories
     {
         private readonly ApplicationDBContext _context = context;
 
-        public async Task<bool> DepartmentISFound(int id)
+        public async Task<bool> DepartmentISFound(int? id)
         {
           return await _context.Departments.AnyAsync(x=> x.DID == id);
         }

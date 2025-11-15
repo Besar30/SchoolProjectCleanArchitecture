@@ -77,5 +77,45 @@ namespace SchoolProject.Service.Implementation
             var result= await _instractorRepository.GetInstructorById(id);
             return Result.Success(result);
         }
+
+        public async Task<Result<string>> UpdateInstractor(Instractor instractor,IFormFile ImageFile)
+        {
+            var InstractorIsExist = await _instractorRepository.InstractorIsExist(instractor.InsId);
+            if (!InstractorIsExist)
+                return Result.Failure<string>(InstractorErrors.InstructorNotFound);
+            var NameInstractorArIsExist=await _instractorRepository.NameArIsExistExcludeSelf(instractor.ENameAr, instractor.InsId);
+            if (NameInstractorArIsExist)
+                return Result.Failure<string>(InstractorErrors.NameArExists);
+            var NameInstractorEnIsExist=await _instractorRepository.NameEnIsExistExcludeSelf(instractor.ENameEn, instractor.InsId);
+            if (NameInstractorEnIsExist)
+                return Result.Failure<string>(InstractorErrors.NameEnExists);
+            if(instractor.DID!=null)
+            {
+                var DepartmentIsExist = await _departmentRepository.DepartmentISFound(instractor.DID);
+                if (!DepartmentIsExist)
+                    return Result.Failure<string>(DepartmentErrors.DepartmentNotFound);
+            }
+            if (instractor.SupervisorId != null) {
+                var InstractorSuperVisorIsExist = await _instractorRepository.SuperVisorToInstractorIsExist(instractor.SupervisorId);
+                if (!InstractorSuperVisorIsExist)
+                    return Result.Failure<string>(InstractorErrors.SupervisorNotFound);
+            }
+            if (ImageFile != null)
+            {
+                var PathImage = await _fileService.UploadImage("Instractors", ImageFile);
+                if (PathImage.IsSuccess)
+                    instractor.Image = PathImage.Value;
+                else
+                    return Result.Failure<string>(InstractorErrors.FailedToUpdateInstructor);
+            }
+            else
+            {
+                var oldInstructor = await _instractorRepository.GetInstructorById(instractor.InsId);
+
+                instractor.Image = oldInstructor.Image;
+            }
+            await _instractorRepository.UpdateInstractorAsync(instractor);
+            return Result.Success("Instructor Updated Success.");
+        }
     }
 }

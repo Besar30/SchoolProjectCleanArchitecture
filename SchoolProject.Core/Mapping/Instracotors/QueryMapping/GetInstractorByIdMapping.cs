@@ -19,6 +19,15 @@ namespace SchoolProject.Core.Mapping.Instracotors
                           opt => opt.MapFrom(src => src.Address))
                .ForMember(dest => dest.Salary,
                           opt => opt.MapFrom(src => src.Salary))
+               .ForMember(des=>des.InstractorWorkForDepartmentName, opt=>opt.MapFrom(src=>src.department.GetLocalized(src.department.DNameAr, src.department.DNameEn)))
+               .ForMember(des=>des.InstractorManageForDepartmentName,opt=>opt.MapFrom(src=>src.departmentManger.GetLocalized(src.departmentManger.DNameAr,src.departmentManger.DNameEn)))
+               .ForMember(des => des.Supervied,
+           opt => opt.MapFrom(src =>
+               src.Instractors.FirstOrDefault() != null
+               ? src.Instractors.FirstOrDefault().GetLocalized(src.Instractors.FirstOrDefault().ENameAr,
+                                                               src.Instractors.FirstOrDefault().ENameEn)
+               : string.Empty
+           ))
                .ForMember(dest => dest.Subjects,
                           opt => opt.MapFrom(src => src.Ins_Subjects));
 

@@ -13,7 +13,9 @@ using System.Threading.Tasks;
 
 namespace SchoolProject.Core.Features.Instractors.Commands.Handler
 {
-    public class InstractorCommandHandler(IFileService fileService,IMapper mapper,IInstractorService instractorService) : IRequestHandler<AddInstractorCommand, Result<string>>
+    public class InstractorCommandHandler(IFileService fileService,IMapper mapper,IInstractorService instractorService) : 
+        IRequestHandler<AddInstractorCommand, Result<string>>,
+        IRequestHandler<UpdateInstractorCommand,Result<string>>
     {
         private readonly IFileService _fileService = fileService;
         private readonly IMapper _mapper = mapper;
@@ -34,8 +36,14 @@ namespace SchoolProject.Core.Features.Instractors.Commands.Handler
             if (!result.IsSuccess)
                 return Result.Failure<string>(result.error);
             return Result.Success("Instructor added successfully");
+        }
 
-
+        public async Task<Result<string>> Handle(UpdateInstractorCommand request, CancellationToken cancellationToken)
+        {
+           var instractorMapped= _mapper.Map<Instractor>(request);
+            var result= await _instractorService.UpdateInstractor(instractorMapped,request.Image);
+            return result.IsSuccess?
+                Result.Success(result.Value): Result.Failure<string>(result.error);
         }
     }
 }

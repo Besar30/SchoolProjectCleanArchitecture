@@ -27,6 +27,7 @@ namespace SchoolProject.Shared.Errors
     );
         public readonly static Error InstructorNotFound =
     new Error("Instructor.NotFound", "Instructor not found.", StatusCodes.Status404NotFound);
-
+        public readonly static Error FailedToUpdateInstructor =
+            new Error("Instructor.FailedToUpdate", "Failed to Update instructor.", StatusCodes.Status500InternalServerError);
     }
 }

@@ -10,6 +10,6 @@ namespace SchoolProject.Infrastructure.Abstracts
     public interface IDepartmentRepository
     {
         Task<Department> GetDepartmentById(int id);
-        Task<bool >DepartmentISFound(int id);
+        Task<bool >DepartmentISFound(int? id);
     }
 }

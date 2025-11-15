@@ -54,11 +54,27 @@ namespace SchoolProject.Infrastructure.Reposatories
         {
            var respone= await _context.instractors.Where(x=>x.InsId == Id)
                                                   .Include(x=>x.Ins_Subjects).ThenInclude(x=>x.subject)
+                                                  .Include(x=>x.department)
+                                                  .Include(x => x.Instractors)
+                                                  .Include(x=>x.Supervisor)
                                                   .SingleOrDefaultAsync();
             return respone;
                                                   
         }
 
-       
+        public async Task UpdateInstractorAsync(Instractor newData)
+        {
+            var old = await _context.instractors
+                                .FirstAsync(x => x.InsId == newData.InsId);
+            old.ENameAr = newData.ENameAr;
+            old.ENameEn = newData.ENameEn;
+            old.Address = newData.Address;
+            old.Position = newData.Position;
+            old.SupervisorId = newData.SupervisorId;
+            old.Salary = newData.Salary;
+            old.DID = newData.DID;
+            old.Image = newData.Image;
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -34,5 +34,13 @@ namespace SchoolProject.Api.Controllers
             return result.IsSuccess?
                               Ok(result) : result.ToProblem();
         }
+        [HttpPut("Update-Insturctor")]
+        [HasPermission(Permissions.UpdateInstructor)]
+        public async Task<IActionResult> UpdateInstractorAsync([FromForm] UpdateInstractorCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return result.IsSuccess ?
+                              Ok(result) : result.ToProblem();
+        }
     }
 }
