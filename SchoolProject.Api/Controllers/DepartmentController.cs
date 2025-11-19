@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SchoolProject.Api.Const;
+using SchoolProject.Core.Features.Departments.Commands.Models;
 using SchoolProject.Core.Features.Departments.Queires.Models;
 using SchoolProject.Infrastructure.Abstracts.Const;
 
@@ -21,6 +22,20 @@ namespace SchoolProject.Api.Controllers
             var response = await _mediator.Send(new GetDepartmentByIdQuery(Id));
             return response.IsSuccess ?
                 Ok(response) : response.ToProblem();
+        }
+        [HttpPost("Add-Department")]
+        public async Task<IActionResult> AddDepartmentAsync([FromBody]AddDepartmentRequestCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return result.IsSuccess ?
+                Ok(result) : result.ToProblem();
+        }
+        [HttpPut("Update-Department")]
+        public async Task<IActionResult> UpdateDepartmentAsync([FromBody] UpdateDepartmentRequestCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return result.IsSuccess ?
+                Ok(result) : result.ToProblem();
         }
     }
 

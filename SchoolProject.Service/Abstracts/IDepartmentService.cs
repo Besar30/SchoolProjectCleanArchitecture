@@ -1,4 +1,5 @@
 ﻿using SchoolProject.Data.Entites;
+using SchoolProject.Shared.Absractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,7 @@ namespace SchoolProject.Service.Abstracts
     public interface IDepartmentService
     {
         Task<Department> GetDeparmentById(int id);
+        Task<Result>AddDepartmentAsync(Department department);
+        Task<Result>UpdateDepartmentAsync(Department department);
     }
 }

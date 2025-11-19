@@ -45,7 +45,7 @@ namespace SchoolProject.Infrastructure.Reposatories
         {
             return await _context.instractors.AnyAsync(x => x.InsId == id );
         }
-        public async Task<bool> InstractorIsExist(int Id)
+        public async Task<bool> InstractorIsExist(int? Id)
         {
             return await _context.instractors.AnyAsync(x=>x.InsId==Id);
         }
@@ -57,6 +57,7 @@ namespace SchoolProject.Infrastructure.Reposatories
                                                   .Include(x=>x.department)
                                                   .Include(x => x.Instractors)
                                                   .Include(x=>x.Supervisor)
+                                                  
                                                   .SingleOrDefaultAsync();
             return respone;
                                                   
