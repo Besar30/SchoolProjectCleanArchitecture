@@ -25,6 +25,13 @@ namespace SchoolProject.Api.Controllers
             return result.IsSuccess?
                 Ok(result) : result.ToProblem();
         }
+        [HttpGet("/Get-All-Instructors")]
+        public async Task<IActionResult> GetAllInstractors()
+        {
+            var result = await _mediator.Send(new GetAllInstractorQuery());
+            return result.IsSuccess ?
+                Ok(result) : result.ToProblem();
+        }
 
         [HttpPost("Add-Insturctor")]
         [HasPermission(Permissions.AddInstructor)]

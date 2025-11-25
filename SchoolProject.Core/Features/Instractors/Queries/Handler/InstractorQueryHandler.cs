@@ -9,7 +9,9 @@ using SchoolProject.Shared.Absractions;
 
 namespace SchoolProject.Core.Features.Instractors.Queries.Handler
 {
-    public class InstractorQueryHandler (IInstractorService instractorService, IMapper mapper,IHttpContextAccessor httpContextAccessor) : IRequestHandler<GetInstractorByIdQuery, Result<GetInstractorByIdResponse>>
+    public class InstractorQueryHandler (IInstractorService instractorService, IMapper mapper,IHttpContextAccessor httpContextAccessor) : 
+                                                                                                IRequestHandler<GetInstractorByIdQuery, Result<GetInstractorByIdResponse>>
+                                                                                                ,IRequestHandler<GetAllInstractorQuery,Result<List<GetAllInstractorResponse>>>
     {
         private readonly IInstractorService _instractorService = instractorService;
         private readonly IMapper _mapper = mapper;
@@ -25,6 +27,13 @@ namespace SchoolProject.Core.Features.Instractors.Queries.Handler
             var RequestAccessor = _httpContextAccessor.HttpContext.Request;
             respone.ImageFile = $"{RequestAccessor.Scheme + "://" + RequestAccessor.Host + resutl.Value.Image}";
             return Result.Success(respone);
+        }
+
+        public async Task<Result<List<GetAllInstractorResponse>>> Handle(GetAllInstractorQuery request, CancellationToken cancellationToken)
+        {
+            var Instractors = await _instractorService.GetAllInstructorsAsync();
+            var InstractorsMapped= _mapper.Map<List<GetAllInstractorResponse>>(Instractors.Value);
+            return Result.Success(InstractorsMapped);
         }
     }
 }

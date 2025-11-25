@@ -77,5 +77,13 @@ namespace SchoolProject.Infrastructure.Reposatories
             old.Image = newData.Image;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<Instractor>> GetAllInstractors()
+        {
+            return await _context.instractors.
+                                            Include(x=>x.department)
+                                            .Include(x=>x.Ins_Subjects).Include(x=>x.Instractors)
+                                            .ToListAsync();
+        }
     }
 }

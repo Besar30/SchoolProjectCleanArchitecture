@@ -16,6 +16,7 @@ namespace SchoolProject.Infrastructure.Abstracts
         public Task<bool> SuperVisorToInstractorIsExist(int?  id);
         public Task AddInstractorAsync(Instractor instractor);
         public Task<Instractor> GetInstructorById(int Id);
+        public Task<List<Instractor>> GetAllInstractors();
         public Task<bool> InstractorIsExist(int? Id);
         public Task UpdateInstractorAsync(Instractor instractor);
 

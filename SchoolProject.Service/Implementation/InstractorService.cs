@@ -117,5 +117,11 @@ namespace SchoolProject.Service.Implementation
             await _instractorRepository.UpdateInstractorAsync(instractor);
             return Result.Success("Instructor Updated Success.");
         }
+
+        public async Task<Result<List<Instractor>>> GetAllInstructorsAsync()
+        {
+            var result = await _instractorRepository.GetAllInstractors();
+            return Result.Success(result);
+        }
     }
 }

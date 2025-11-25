@@ -7,6 +7,7 @@ namespace SchoolProject.Core.Mapping.Instracotors
             AddInstractorMapping();
             GetInstractorByIdMapping();
             UpdateInstractorCommandMapping();
+            GetAllInstractorsMapping();
         }
     }
 }
