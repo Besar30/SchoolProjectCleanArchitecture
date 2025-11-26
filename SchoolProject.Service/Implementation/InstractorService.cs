@@ -7,6 +7,7 @@ using SchoolProject.Shared.Errors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -121,6 +122,24 @@ namespace SchoolProject.Service.Implementation
         public async Task<Result<List<Instractor>>> GetAllInstructorsAsync()
         {
             var result = await _instractorRepository.GetAllInstractors();
+            return Result.Success(result);
+        }
+
+        public async Task<Result> DeleteInstractorAsync(int Id)
+        {
+            var InstractorIsExist = await _instractorRepository.InstractorIsExist(Id);
+            if (!InstractorIsExist)
+                return Result.Failure(InstractorErrors.InstructorNotFound);
+            await _instractorRepository.DeleteInstractorAsync(Id);
+            return Result.Success();
+        }
+
+        public async Task<Result<Instractor>> GetInstractorByName(string Name)
+        {
+            var instractorIsExist= await _instractorRepository.InstractorIsExistByName(Name);
+            if (!instractorIsExist)
+                return Result.Failure<Instractor>(InstractorErrors.InstructorNotFound);
+            var result = await _instractorRepository.GetInstructorByName(Name);
             return Result.Success(result);
         }
     }

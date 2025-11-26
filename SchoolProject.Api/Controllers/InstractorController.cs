@@ -19,13 +19,26 @@ namespace SchoolProject.Api.Controllers
 
 
         [HttpGet("/Get-Instructor-By-Id/{Id}")]
+        [HasPermission(Permissions.GetInstructors)]
+
         public async Task<IActionResult>GetInstractoByIdAsyc(int Id)
         {
             var result = await _mediator.Send(new GetInstractorByIdQuery(Id));
             return result.IsSuccess?
                 Ok(result) : result.ToProblem();
         }
+
+        [HttpGet("/Get-Instructor-By-Name/{Name}")]
+        [HasPermission(Permissions.GetInstructors)]
+        public async Task<IActionResult> GetInstractoByNameAsyc([FromRoute]string Name)
+        {
+            var result = await _mediator.Send(new GetInstractorByNameQuery(Name));
+            return result.IsSuccess ?
+                Ok(result) : result.ToProblem();
+        }
+
         [HttpGet("/Get-All-Instructors")]
+        [HasPermission(Permissions.GetInstructors)]
         public async Task<IActionResult> GetAllInstractors()
         {
             var result = await _mediator.Send(new GetAllInstractorQuery());
@@ -46,6 +59,14 @@ namespace SchoolProject.Api.Controllers
         public async Task<IActionResult> UpdateInstractorAsync([FromForm] UpdateInstractorCommand command)
         {
             var result = await _mediator.Send(command);
+            return result.IsSuccess ?
+                              Ok(result) : result.ToProblem();
+        }
+        [HttpDelete("Delete-Insturctor/{Id}")]
+        [HasPermission(Permissions.DeleteInstructor)]
+        public async Task<IActionResult> DeleteInstractorAsync([FromRoute] int Id)
+        {
+            var result = await _mediator.Send(new DeleteInstractorRequest(Id));
             return result.IsSuccess ?
                               Ok(result) : result.ToProblem();
         }

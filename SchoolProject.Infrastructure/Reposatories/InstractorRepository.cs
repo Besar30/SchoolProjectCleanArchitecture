@@ -82,8 +82,31 @@ namespace SchoolProject.Infrastructure.Reposatories
         {
             return await _context.instractors.
                                             Include(x=>x.department)
-                                            .Include(x=>x.Ins_Subjects).Include(x=>x.Instractors)
+                                            .Include(x=>x.Ins_Subjects).ThenInclude(x=>x.subject).Include(x=>x.Instractors)
                                             .ToListAsync();
+        }
+
+        public async Task DeleteInstractorAsync(int Id)
+        {
+            var instractor= await _context.instractors.Where(x=>x.InsId == Id).FirstAsync();
+            _context.Remove(instractor!);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<Instractor> GetInstructorByName(string Name)
+        {
+            var respone = await _context.instractors.Where(x => x.ENameAr == Name || x.ENameEn==Name)
+                                                  .Include(x => x.Ins_Subjects).ThenInclude(x => x.subject)
+                                                  .Include(x => x.department)
+                                                  .Include(x => x.Instractors)
+                                                  .Include(x => x.Supervisor)
+                                                  .SingleOrDefaultAsync();
+            return respone;
+        }
+
+        public async Task<bool> InstractorIsExistByName(string Name)
+        {
+            return await _context.instractors.AnyAsync(x=>x.ENameAr==Name || x.ENameEn==Name);
         }
     }
 }

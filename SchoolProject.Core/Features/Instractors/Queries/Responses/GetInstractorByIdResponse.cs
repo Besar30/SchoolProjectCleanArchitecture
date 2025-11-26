@@ -11,6 +11,7 @@ namespace SchoolProject.Core.Features.Instractors.Queries.Responses
 {
     public class GetInstractorByIdResponse
     {
+        public int InsId { get; set; }
         public string? Name { get; set; }
         public string? Address { get; set; }
         public int? Salary { get; set; }

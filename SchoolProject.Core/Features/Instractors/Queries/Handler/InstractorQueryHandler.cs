@@ -11,7 +11,8 @@ namespace SchoolProject.Core.Features.Instractors.Queries.Handler
 {
     public class InstractorQueryHandler (IInstractorService instractorService, IMapper mapper,IHttpContextAccessor httpContextAccessor) : 
                                                                                                 IRequestHandler<GetInstractorByIdQuery, Result<GetInstractorByIdResponse>>
-                                                                                                ,IRequestHandler<GetAllInstractorQuery,Result<List<GetAllInstractorResponse>>>
+                                                                                                ,IRequestHandler<GetAllInstractorQuery,Result<List<GetAllInstractorResponse>>>,
+                                                                                                 IRequestHandler<GetInstractorByNameQuery,Result<GetInstractorByIdResponse>>
     {
         private readonly IInstractorService _instractorService = instractorService;
         private readonly IMapper _mapper = mapper;
@@ -34,6 +35,17 @@ namespace SchoolProject.Core.Features.Instractors.Queries.Handler
             var Instractors = await _instractorService.GetAllInstructorsAsync();
             var InstractorsMapped= _mapper.Map<List<GetAllInstractorResponse>>(Instractors.Value);
             return Result.Success(InstractorsMapped);
+        }
+
+        public async Task<Result<GetInstractorByIdResponse>> Handle(GetInstractorByNameQuery request, CancellationToken cancellationToken)
+        {
+            var instractor= await _instractorService.GetInstractorByName(request.Name);
+            if (instractor.isFailure)
+                return Result.Failure<GetInstractorByIdResponse>(instractor.error);
+            var instracorMapped = _mapper.Map<GetInstractorByIdResponse>(instractor.Value);
+            var RequestAccessor = _httpContextAccessor.HttpContext.Request;
+            instracorMapped.ImageFile= $"{RequestAccessor.Scheme + "://" + RequestAccessor.Host + instractor.Value.Image}";
+            return Result.Success(instracorMapped);
         }
     }
 }
