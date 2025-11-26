@@ -142,5 +142,14 @@ namespace SchoolProject.Service.Implementation
             var result = await _instractorRepository.GetInstructorByName(Name);
             return Result.Success(result);
         }
+
+        public async Task<Result> ToggleStatusInstractor(int Id)
+        {
+            var InstractorIsExist = await _instractorRepository.InstractorIsExist(Id);
+            if (!InstractorIsExist)
+                return Result.Failure(InstractorErrors.InstructorNotFound);
+            await _instractorRepository.ToggleStatusInstractor(Id);
+            return Result.Success();
+        }
     }
 }

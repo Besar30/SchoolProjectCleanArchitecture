@@ -18,8 +18,9 @@ namespace SchoolProject.Data.Entites
         public string? NameEn { get; set; }
         public string? Address { get; set; }= string.Empty;
         public string? phone { get; set; } = string.Empty;
-
         public int? DID { get; set; }
+        public bool IsDisabled { get; set; }
+
         [ForeignKey("DID")]
         public virtual Department Department { get; set; }
         [InverseProperty("Student")]

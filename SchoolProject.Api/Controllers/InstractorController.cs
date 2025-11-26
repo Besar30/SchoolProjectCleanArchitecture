@@ -70,5 +70,12 @@ namespace SchoolProject.Api.Controllers
             return result.IsSuccess ?
                               Ok(result) : result.ToProblem();
         }
+        [HttpPut("Toggle-Status-Instractor/{Id}")]
+        public async Task<IActionResult> ToggleStatusInstractorAsync([FromRoute]int Id)
+        {
+            var result = await _mediator.Send(new ToggleStatusInstractorCommand(Id));
+            return result.IsSuccess ?
+                              Ok(result) : result.ToProblem();
+        }
     }
 }

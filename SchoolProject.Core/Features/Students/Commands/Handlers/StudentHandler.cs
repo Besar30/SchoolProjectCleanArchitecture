@@ -14,7 +14,8 @@ namespace SchoolProject.Core.Features.Students.Commands.Handlers
 {
     public class StudentHandler(IMapper mapper, IStudentService studentService,IStringLocalizer<SharedResources> stringLocalizer,IDepartmentService departmentService) : IRequestHandler<AddStudentRequest, Result<string>>,
                                                                                                                                        IRequestHandler<EditStudentRequest, Result<string>>,
-                                                                                                                                       IRequestHandler<DeleteStudentRequest,Result<string>>
+                                                                                                                                       IRequestHandler<DeleteStudentRequest,Result<string>>,
+                                                                                                                                       IRequestHandler<ToggleStatusStudentCommand,Result<string>>
     {
         private readonly IMapper _mapper = mapper;
         private readonly IStudentService _studentService = studentService;
@@ -61,6 +62,13 @@ namespace SchoolProject.Core.Features.Students.Commands.Handlers
                 return Result.Failure<string>(StudentIsExist.error);
             var result = await _studentService.DeleteStudent(request.Id);
             return result;
+        }
+
+        public async Task<Result<string>> Handle(ToggleStatusStudentCommand request, CancellationToken cancellationToken)
+        {
+            var result= await _studentService.ToggleStatusStudentAsync(request.Id);
+            return result.IsSuccess ?
+                Result.Success("Student Toggle Status successfully.") : Result.Failure<string>(result.error);
         }
     }
 }

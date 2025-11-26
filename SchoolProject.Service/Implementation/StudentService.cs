@@ -57,5 +57,14 @@ namespace SchoolProject.Service.Implementation
            await _studentRepository.DeleteStudentAsync(Id);
             return Result.Success("Student Deleted");
         }
+
+        public async Task<Result> ToggleStatusStudentAsync(int Id)
+        {
+            var student = await _studentRepository.StudentIsExist(Id);
+            if (!student)
+                return Result.Failure(StudentErrors.StudentNotFound);
+            await _studentRepository.ToggleStatusStudentAsync(Id);
+            return Result.Success();
+        }
     }
 }

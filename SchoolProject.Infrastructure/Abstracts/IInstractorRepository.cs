@@ -20,7 +20,7 @@ namespace SchoolProject.Infrastructure.Abstracts
         public Task<List<Instractor>> GetAllInstractors();
         public Task<bool> InstractorIsExist(int? Id);
         public Task<bool> InstractorIsExistByName(string Name);
-
+        public Task ToggleStatusInstractor(int Id);
         public Task UpdateInstractorAsync(Instractor instractor);
         public Task DeleteInstractorAsync(int Id);
 

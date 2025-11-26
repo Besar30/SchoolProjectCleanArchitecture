@@ -108,5 +108,12 @@ namespace SchoolProject.Infrastructure.Reposatories
         {
             return await _context.instractors.AnyAsync(x=>x.ENameAr==Name || x.ENameEn==Name);
         }
+
+        public async Task ToggleStatusInstractor(int Id)
+        {
+            var Instractor= await _context.instractors.Where(x=>x.InsId==Id).FirstAsync();
+            Instractor.IsDisabled= !Instractor.IsDisabled;
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -16,7 +16,8 @@ namespace SchoolProject.Core.Features.Instractors.Commands.Handler
     public class InstractorCommandHandler(IFileService fileService,IMapper mapper,IInstractorService instractorService) : 
         IRequestHandler<AddInstractorCommand, Result<string>>,
         IRequestHandler<UpdateInstractorCommand,Result<string>>,
-        IRequestHandler<DeleteInstractorRequest,Result<string>>
+        IRequestHandler<DeleteInstractorRequest,Result<string>>,
+        IRequestHandler<ToggleStatusInstractorCommand,Result<string>>
     {
         private readonly IFileService _fileService = fileService;
         private readonly IMapper _mapper = mapper;
@@ -52,6 +53,13 @@ namespace SchoolProject.Core.Features.Instractors.Commands.Handler
             var result = await _instractorService.DeleteInstractorAsync(request.Id);
             return result.IsSuccess?
                 Result.Success("Instructor Deleted successfully.") :Result.Failure<string>(result.error);
+        }
+
+        public async Task<Result<string>> Handle(ToggleStatusInstractorCommand request, CancellationToken cancellationToken)
+        {
+            var result = await _instractorService.ToggleStatusInstractor(request.Id);
+            return result.IsSuccess ?
+                Result.Success("Instructor ToggleStatus successfully.") : Result.Failure<string>(result.error);
         }
     }
 }

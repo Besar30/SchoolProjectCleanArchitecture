@@ -21,6 +21,10 @@ namespace SchoolProject.Infrastructure.Reposatories
                    .AsNoTracking();
                   
         }
+        public async Task<bool> StudentIsExist(int Id)
+        {
+           return await _context.Students.AnyAsync(x=>x.StudentID== Id);
+        }
         public async Task<Student?> GetStudentById(int Id)
         {
             var student = await _context.Students.Include(x=>x.Department).FirstOrDefaultAsync(x => x.StudentID == Id);
@@ -55,5 +59,14 @@ namespace SchoolProject.Infrastructure.Reposatories
             _context.Students.Remove(student);
             await _context.SaveChangesAsync();
         }
+
+        public async Task ToggleStatusStudentAsync(int Id)
+        {
+            var student = await _context.Students.FirstOrDefaultAsync(x => x.StudentID == Id);
+            student.IsDisabled =!student.IsDisabled;
+            await _context.SaveChangesAsync();
+        }
+
+  
     }
 }

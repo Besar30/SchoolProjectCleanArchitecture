@@ -16,5 +16,6 @@ namespace SchoolProject.Service.Abstracts
         public Task<Result<List<Instractor>>> GetAllInstructorsAsync();
         public Task<Result<string>> UpdateInstractor(Instractor instractor,IFormFile ImageFile);
         public Task<Result> DeleteInstractorAsync(int Id);
+        public Task<Result> ToggleStatusInstractor(int Id);
     }
 }

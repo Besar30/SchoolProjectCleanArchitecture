@@ -10,5 +10,7 @@ namespace SchoolProject.Service.Abstracts
         public Task<Result<string>> UpdateStudentAsync(Student student);
         public Task<Result> NameIsFoundExcludeSelf(string name, int Id);
         public Task <Result<string>> DeleteStudent(int Id);
+        public Task<Result> ToggleStatusStudentAsync(int Id);
+
     }
 }

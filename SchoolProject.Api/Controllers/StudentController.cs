@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SchoolProject.Api.Const;
+using SchoolProject.Core.Features.Instractors.Commands.Models;
 using SchoolProject.Core.Features.Students.Commands.Models;
 using SchoolProject.Core.Features.Students.Queires.Models;
 using SchoolProject.Core.Filters;
@@ -72,7 +73,13 @@ namespace SchoolProject.Api.Controllers
                 Ok(result):
                 result.ToProblem();
         }
-    
 
+        [HttpPut("Toggle-Status-Student/{Id}")]
+        public async Task<IActionResult> ToggleStatusStudentAsync([FromRoute] int Id)
+        {
+            var result = await _mediator.Send(new ToggleStatusStudentCommand(Id));
+            return result.IsSuccess ?
+                              Ok(result) : result.ToProblem();
+        }
     }
 }
