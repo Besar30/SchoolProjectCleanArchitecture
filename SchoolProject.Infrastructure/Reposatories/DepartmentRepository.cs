@@ -78,5 +78,12 @@ namespace SchoolProject.Infrastructure.Reposatories
         {
            return await _context.Departments.AnyAsync(x=>x.InsManger==InsId && x.DID!=DeptId);
         }
+
+        public async Task DeleteDepartmentAsync(int Id)
+        {
+            var department = await _context.Departments.FirstOrDefaultAsync(x => x.DID == Id);
+            _context.Departments.Remove(department!);
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -31,6 +31,7 @@ namespace SchoolProject.Service.Implementation
             return Result.Success();
         }
 
+
         public async Task<Department> GetDeparmentById(int id)
         {
             return await _departmentRepository.GetDepartmentById(id);
@@ -59,5 +60,14 @@ namespace SchoolProject.Service.Implementation
             await _departmentRepository.UpdateDepartmentAsync(department);
             return Result.Success();
         }
+        public async Task<Result> DeleteDepartmentAsync(int Id)
+        {
+            var Department= await _departmentRepository.DepartmentISFound(Id);
+            if (!Department)
+                return Result.Failure(DepartmentErrors.DepartmentNotFound);
+            await _departmentRepository.DeleteDepartmentAsync(Id);
+            return Result.Success();
+        }
+
     }
 }

@@ -14,7 +14,8 @@ namespace SchoolProject.Core.Features.Departments.Commands.Handler
 {
     public class DepartmentCommandHandler (IMapper mapper,IDepartmentService departmentService): 
                                                                                                 IRequestHandler<AddDepartmentRequestCommand, Result<string>>,
-                                                                                                IRequestHandler<UpdateDepartmentRequestCommand,Result<string>>
+                                                                                                IRequestHandler<UpdateDepartmentRequestCommand,Result<string>>,
+                                                                                                IRequestHandler<DeleteDepartmentRequestCommand,Result<string>>
     {
         private readonly IMapper _mapper = mapper;
         private readonly IDepartmentService _departmentService = departmentService;
@@ -33,6 +34,13 @@ namespace SchoolProject.Core.Features.Departments.Commands.Handler
             var result = await _departmentService.UpdateDepartmentAsync(DepaetmentMapped);
             return result.IsSuccess?
                 Result.Success("Department Updated Success."): Result.Failure<string>(result.error);
+        }
+
+        public async Task<Result<string>> Handle(DeleteDepartmentRequestCommand request, CancellationToken cancellationToken)
+        {
+            var result = await _departmentService.DeleteDepartmentAsync(request.Id);
+            return result.IsSuccess?
+                Result.Success("Department Deleted Success."):Result.Failure<string>(result.error);
         }
     }
 }
