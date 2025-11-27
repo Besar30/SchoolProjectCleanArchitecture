@@ -25,6 +25,13 @@ namespace SchoolProject.Infrastructure.Reposatories
         {
           return await _context.Departments.AnyAsync(x=> x.DID == id);
         }
+        public async Task<List<Department>> GetAllDepartmentAsync()
+        {
+            return await _context.Departments.Include(x => x.Students)
+                                         .Include(x => x.DepartmentSubjects).ThenInclude(x => x.Subjects)
+                                         .Include(x => x.instractors)
+                                         .Include(x => x.instractor).ToListAsync();
+        }
         public async Task<Department> GetDepartmentById(int id)
         {
             var response = await _context.Departments.Where(x=>x.DID == id)
@@ -85,5 +92,7 @@ namespace SchoolProject.Infrastructure.Reposatories
             _context.Departments.Remove(department!);
             await _context.SaveChangesAsync();
         }
+
+
     }
 }

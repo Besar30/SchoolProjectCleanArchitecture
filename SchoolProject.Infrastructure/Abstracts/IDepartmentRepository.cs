@@ -20,6 +20,7 @@ namespace SchoolProject.Infrastructure.Abstracts
         Task UpdateDepartmentAsync(Department department);
         Task<bool> InstractorIsAlreadyManageDepartmentExcludeSlef( int? InsId,int DeptId);
         Task DeleteDepartmentAsync(int Id);
+        Task<List<Department>> GetAllDepartmentAsync();
 
     }
 }

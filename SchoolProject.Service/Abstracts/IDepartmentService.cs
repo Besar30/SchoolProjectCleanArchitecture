@@ -14,5 +14,6 @@ namespace SchoolProject.Service.Abstracts
         Task<Result>AddDepartmentAsync(Department department);
         Task<Result>UpdateDepartmentAsync(Department department);
         Task<Result> DeleteDepartmentAsync(int Id);
+        Task<Result<List<Department>>> GetAllDepartment();
     }
 }

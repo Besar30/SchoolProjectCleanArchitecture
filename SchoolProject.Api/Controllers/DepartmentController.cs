@@ -15,6 +15,13 @@ namespace SchoolProject.Api.Controllers
     public class DepartmentController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
+        [HttpGet("Get-All-Department")]
+        public async Task<IActionResult> GetAllDepartment()
+        {
+            var result= await _mediator.Send(new GetAllDepartmentQuery());
+            return result.IsSuccess ?
+              Ok(result) : result.ToProblem();
+        }
 
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetDepartmentById([FromRoute] int Id)

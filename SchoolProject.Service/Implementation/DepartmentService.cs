@@ -3,6 +3,7 @@ using SchoolProject.Infrastructure.Abstracts;
 using SchoolProject.Service.Abstracts;
 using SchoolProject.Shared.Absractions;
 using SchoolProject.Shared.Errors;
+
 namespace SchoolProject.Service.Implementation
 {
     public class DepartmentService(IDepartmentRepository departmentRepository,IInstractorRepository instractorRepository) : IDepartmentService
@@ -69,5 +70,10 @@ namespace SchoolProject.Service.Implementation
             return Result.Success();
         }
 
+        public async Task<Result<List<Department>>> GetAllDepartment()
+        {
+           var result= await _departmentRepository.GetAllDepartmentAsync();
+            return Result.Success(result);
+        }
     }
 }
