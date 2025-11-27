@@ -22,9 +22,9 @@ namespace SchoolProject.Infrastructure.Reposatories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IQueryable<Subject>> GetAllSubjects()
+        public IQueryable<Subject> GetAllSubjects()
         {
-            return  _context.Subjects.AsQueryable().AsNoTracking();
+            return  _context.Subjects.AsNoTracking();
         }
     }
 }

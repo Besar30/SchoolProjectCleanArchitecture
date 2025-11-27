@@ -7,6 +7,6 @@ namespace SchoolProject.Infrastructure.Abstracts
         Task<bool> SubjectNameArIsAlreadyExist(string Name);
         Task<bool> SubjectNameEnIsAlreadyExist(string Name);
         Task AddSubjectAsync(Subject subject);
-        Task<IQueryable<Subject>> GetAllSubjects();
+        IQueryable<Subject> GetAllSubjects();
     }
 }

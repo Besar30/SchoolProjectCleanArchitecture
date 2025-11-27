@@ -22,7 +22,7 @@ namespace SchoolProject.Core.Features.Subjects.Queries.Handler
 
         public async Task<Result<PaginatedList<GetAllSubjectResponse>>> Handle(GetAllSubjectRequestQuery request, CancellationToken cancellationToken)
         {
-            var Subjects =await _subjectService.GetAllSubject();
+            var Subjects = _subjectService.GetAllSubject();
             if (!string.IsNullOrEmpty(request._requestFilters.SortColume))
             {
                 var direction = request._requestFilters.SortDirection?.ToLower() == "desc" ? "desc" : "asc";

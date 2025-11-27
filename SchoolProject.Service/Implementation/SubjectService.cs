@@ -29,9 +29,9 @@ namespace SchoolProject.Service.Implementation
             return Result.Success();
         }
 
-        public async Task<IQueryable<Subject>> GetAllSubject()
+        public IQueryable<Subject> GetAllSubject()
         {
-            var result=await _subjectRepository.GetAllSubjects();
+            var result=_subjectRepository.GetAllSubjects();
             return result;
         }
     }
