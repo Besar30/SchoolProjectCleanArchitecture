@@ -34,5 +34,13 @@ namespace SchoolProject.Service.Implementation
             var result=_subjectRepository.GetAllSubjects();
             return result;
         }
+
+        public async Task<Result<Subject>> GetSubjectById(int Id)
+        {
+           var subject= await _subjectRepository.GetSubjectById(Id);
+            if (subject == null)
+                return Result.Failure<Subject>(SubjectErrors.SubjectNotFound);
+            return Result.Success(subject);
+        }
     }
 }

@@ -15,7 +15,9 @@ using System.Threading.Tasks;
 
 namespace SchoolProject.Core.Features.Subjects.Queries.Handler
 {
-    public class SubjectQueryHandler(ISubjectService subjectService,IMapper mapper) : IRequestHandler<GetAllSubjectRequestQuery, Result<PaginatedList<GetAllSubjectResponse>>>
+    public class SubjectQueryHandler(ISubjectService subjectService,IMapper mapper) : 
+                                                                                IRequestHandler<GetAllSubjectRequestQuery, Result<PaginatedList<GetAllSubjectResponse>>>,
+                                                                                IRequestHandler<GetSubjectByIdRequestQuery,Result<GetSubjectByIdResponse>>
     {
         private readonly ISubjectService _subjectService = subjectService;
         private readonly IMapper _mapper = mapper;
@@ -40,6 +42,15 @@ namespace SchoolProject.Core.Features.Subjects.Queries.Handler
                 SubjectPagination.TotalPages
             );
             return Result.Success(result);
+        }
+
+        public async Task<Result<GetSubjectByIdResponse>> Handle(GetSubjectByIdRequestQuery request, CancellationToken cancellationToken)
+        {
+            var subject = await _subjectService.GetSubjectById(request.Id);
+            if (subject.isFailure)
+                return Result.Failure<GetSubjectByIdResponse>(subject.error);
+            var subjectResponse=  _mapper.Map<GetSubjectByIdResponse>(subject.Value);
+            return Result.Success(subjectResponse);
         }
     }
 }

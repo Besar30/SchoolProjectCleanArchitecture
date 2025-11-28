@@ -17,7 +17,13 @@ namespace SchoolProject.Api.Controllers
     public class SubjectController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
-
+        [HttpGet("Get-Subject-By-Id/{Id}")]
+        public async Task<IActionResult> GetSubjectByIdAsync([FromRoute] int Id)
+        {
+            var result = await _mediator.Send(new GetSubjectByIdRequestQuery(Id));
+            return result.IsSuccess ?
+               Ok(result) : result.ToProblem();
+        }
         [HttpGet("Get-All-Subject-Pagination-Filter")]
         [HasPermission(Permissions.GetSubjects)]
         public async Task<IActionResult> GetAllSubjectAsync([FromQuery]RequestFilters requestFilters)

@@ -13,6 +13,7 @@ namespace SchoolProject.Core.Mapping.Subjects
         {
             AddSubjectCommandMapping();
             GetAllSubjectQueryMapping();
+            GetSubjectByIdQueryMapping();
         }
     }
 }

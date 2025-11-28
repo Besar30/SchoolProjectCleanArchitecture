@@ -12,5 +12,6 @@ namespace SchoolProject.Service.Abstracts
     {
         public Task<Result> AddSubjectAsync(Subject subject);
         public IQueryable<Subject> GetAllSubject();
+        public Task<Result<Subject>> GetSubjectById(int Id);
     }
 }

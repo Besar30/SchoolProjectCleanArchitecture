@@ -14,5 +14,7 @@ namespace SchoolProject.Shared.Errors
                   new Error("Subject.NameArExists", "Arabic name already exists.", StatusCodes.Status409Conflict);
         public readonly static Error NameEnExists =
                  new Error("Subject.NameEnExists", "English name already exists.", StatusCodes.Status409Conflict);
+        public static readonly Error SubjectNotFound =
+           new("Subject.StudentNotFound", "Subject is not found", StatusCodes.Status404NotFound);
     }
 }

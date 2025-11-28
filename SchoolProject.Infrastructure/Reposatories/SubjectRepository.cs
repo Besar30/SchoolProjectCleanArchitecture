@@ -26,5 +26,14 @@ namespace SchoolProject.Infrastructure.Reposatories
         {
             return  _context.Subjects.AsNoTracking();
         }
+
+        public async Task<Subject> GetSubjectById(int Id)
+        {
+           return await _context.Subjects
+                                        .Include(x=>x.StudentsSubjects).ThenInclude(x=>x.Student)
+                                        .Include(s=>s.InsSubjects).ThenInclude(x=>x.instractor)
+                                        .Include(x=>x.DepartmetsSubjects).ThenInclude(x=>x.Department)
+                                        .FirstOrDefaultAsync(x=>x.SubID==Id);
+        }
     }
 }
