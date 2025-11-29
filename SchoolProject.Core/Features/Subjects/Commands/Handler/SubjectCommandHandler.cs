@@ -12,7 +12,9 @@ using System.Threading.Tasks;
 
 namespace SchoolProject.Core.Features.Subjects.Commands.Handler
 {
-    public class SubjectCommandHandler(IMapper mapper,ISubjectService subjectService) : IRequestHandler<AddSubjectRequestCommand, Result<string>>
+    public class SubjectCommandHandler(IMapper mapper,ISubjectService subjectService) : 
+                                                                                      IRequestHandler<AddSubjectRequestCommand, Result<string>>,
+                                                                                       IRequestHandler<UpdateSubjectRequestCommand, Result<string>>
     {
         private readonly IMapper _mapper = mapper;
         private readonly ISubjectService _subjectService = subjectService;
@@ -23,6 +25,14 @@ namespace SchoolProject.Core.Features.Subjects.Commands.Handler
             var result = await _subjectService.AddSubjectAsync(SubjectMapped);
             return result.IsSuccess ?
                 Result.Success("Subject Added successfully.") : Result.Failure<string>(result.error);
+        }
+
+        public async Task<Result<string>> Handle(UpdateSubjectRequestCommand request, CancellationToken cancellationToken)
+        {
+            var SubjectMapped = _mapper.Map<Subject>(request);
+            var result= await _subjectService.UpdateSubject(SubjectMapped);
+            return result.IsSuccess?
+                Result.Success("Subject Updated successfully.") :Result.Failure<string>(result.error);
         }
     }
 }

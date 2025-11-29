@@ -42,5 +42,20 @@ namespace SchoolProject.Service.Implementation
                 return Result.Failure<Subject>(SubjectErrors.SubjectNotFound);
             return Result.Success(subject);
         }
+
+        public async Task<Result> UpdateSubject(Subject subject)
+        {
+            var SubjectIsExist = await _subjectRepository.GetSubjectByIdToUpdate(subject.SubID);
+            if (SubjectIsExist == null)
+                return Result.Failure(SubjectErrors.SubjectNotFound);
+            var NewSubjectNameArAlreadyExist= await _subjectRepository.NameArIsExistExcludeSelf(subject.SubjectNameAr!,subject.SubID);
+            if (NewSubjectNameArAlreadyExist)
+                return Result.Failure(SubjectErrors.NameArExists);
+            var NewSubjectNameEnAlreadyExist= await _subjectRepository.NameEnIsExistExcludeSelf(subject.SubjectNameEn!,subject.SubID);
+            if (NewSubjectNameEnAlreadyExist)
+                return Result.Failure(SubjectErrors.NameEnExists);
+            await _subjectRepository.UpdateSubject(subject);
+            return Result.Success();
+        }
     }
 }

@@ -2,6 +2,7 @@
 using SchoolProject.Data.Entites;
 using SchoolProject.Infrastructure.Abstracts;
 using SchoolProject.Infrastructure.Data;
+using static Azure.Core.HttpHeader;
 
 namespace SchoolProject.Infrastructure.Reposatories
 {
@@ -15,6 +16,16 @@ namespace SchoolProject.Infrastructure.Reposatories
         public async Task<bool> SubjectNameEnIsAlreadyExist(string Name)
         {
             return await _context.Subjects.AnyAsync(x => x.SubjectNameEn == Name);
+        }
+
+        public async Task<bool> NameArIsExistExcludeSelf(string nameAr, int id)
+        {
+           return await _context.Subjects.AnyAsync(x=>x.SubjectNameAr == nameAr&&x.SubID!=id);
+        }
+
+        public async Task<bool> NameEnIsExistExcludeSelf(string nameEn, int id)
+        {
+            return await _context.Subjects.AnyAsync(x => x.SubjectNameEn == nameEn && x.SubID != id);
         }
         public async Task AddSubjectAsync(Subject subject)
         {
@@ -34,6 +45,20 @@ namespace SchoolProject.Infrastructure.Reposatories
                                         .Include(s=>s.InsSubjects).ThenInclude(x=>x.instractor)
                                         .Include(x=>x.DepartmetsSubjects).ThenInclude(x=>x.Department)
                                         .FirstOrDefaultAsync(x=>x.SubID==Id);
+        }
+
+        public async Task<Subject> GetSubjectByIdToUpdate(int Id)
+        {
+            return await _context.Subjects.FirstOrDefaultAsync(x=>x.SubID == Id);
+        }
+
+        public async Task UpdateSubject(Subject Subject)
+        {
+           var oldSubject= await _context.Subjects.FirstAsync(x=>x.SubID==Subject.SubID);
+            oldSubject.SubjectNameAr=Subject.SubjectNameAr;
+            oldSubject.SubjectNameEn=Subject.SubjectNameEn;
+            oldSubject.Period=Subject.Period;
+            await _context.SaveChangesAsync();
         }
     }
 }

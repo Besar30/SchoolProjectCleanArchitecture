@@ -39,5 +39,12 @@ namespace SchoolProject.Api.Controllers
             var result= await _mediator.Send(command);
             return result.IsSuccess ? Ok(result) : result.ToProblem();
         }
+        [HttpPut("Update-Subject")]
+        [HasPermission(Permissions.UpdateSubject)]
+        public async Task<IActionResult> UpdateSubjectAsync([FromBody] UpdateSubjectRequestCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return result.IsSuccess ? Ok(result) : result.ToProblem();
+        }
     }
 }
