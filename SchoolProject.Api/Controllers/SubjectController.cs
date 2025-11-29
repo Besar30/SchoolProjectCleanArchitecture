@@ -46,5 +46,12 @@ namespace SchoolProject.Api.Controllers
             var result = await _mediator.Send(command);
             return result.IsSuccess ? Ok(result) : result.ToProblem();
         }
+        [HttpDelete("Delete-Subject/{Id}")]
+        [HasPermission(Permissions.UpdateSubject)]
+        public async Task<IActionResult> DeleteSubjectAsync([FromRoute]int Id)
+        {
+            var result = await _mediator.Send(new DeleteSubjectRequestCommand(Id));
+            return result.IsSuccess ? Ok(result) : result.ToProblem();
+        }
     }
 }

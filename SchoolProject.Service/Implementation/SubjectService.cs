@@ -29,6 +29,8 @@ namespace SchoolProject.Service.Implementation
             return Result.Success();
         }
 
+
+
         public IQueryable<Subject> GetAllSubject()
         {
             var result=_subjectRepository.GetAllSubjects();
@@ -57,5 +59,14 @@ namespace SchoolProject.Service.Implementation
             await _subjectRepository.UpdateSubject(subject);
             return Result.Success();
         }
+        public async Task<Result> DeleteSubjectAsync(int Id)
+        {
+            var Subject = await _subjectRepository.GetSubjectByIdToUpdate(Id);
+            if (Subject == null)
+                return Result.Failure(SubjectErrors.SubjectNotFound);
+            await _subjectRepository.DeleteSubjectAsync(Subject);
+            return Result.Success();
+        }
+
     }
 }

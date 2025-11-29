@@ -14,5 +14,6 @@ namespace SchoolProject.Service.Abstracts
         public IQueryable<Subject> GetAllSubject();
         public Task<Result<Subject>> GetSubjectById(int Id);
         public Task<Result> UpdateSubject(Subject subject);
+        public Task<Result> DeleteSubjectAsync(int Id);
     }
 }

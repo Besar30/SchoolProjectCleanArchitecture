@@ -60,5 +60,12 @@ namespace SchoolProject.Infrastructure.Reposatories
             oldSubject.Period=Subject.Period;
             await _context.SaveChangesAsync();
         }
+
+        public async Task DeleteSubjectAsync(Subject subject)
+        {
+           
+            _context.Subjects.Remove(subject);
+            await _context.SaveChangesAsync();
+        }
     }
 }

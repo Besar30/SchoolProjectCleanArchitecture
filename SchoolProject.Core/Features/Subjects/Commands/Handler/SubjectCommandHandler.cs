@@ -14,7 +14,8 @@ namespace SchoolProject.Core.Features.Subjects.Commands.Handler
 {
     public class SubjectCommandHandler(IMapper mapper,ISubjectService subjectService) : 
                                                                                       IRequestHandler<AddSubjectRequestCommand, Result<string>>,
-                                                                                       IRequestHandler<UpdateSubjectRequestCommand, Result<string>>
+                                                                                      IRequestHandler<UpdateSubjectRequestCommand, Result<string>>,
+                                                                                      IRequestHandler<DeleteSubjectRequestCommand,Result<string>> 
     {
         private readonly IMapper _mapper = mapper;
         private readonly ISubjectService _subjectService = subjectService;
@@ -33,6 +34,13 @@ namespace SchoolProject.Core.Features.Subjects.Commands.Handler
             var result= await _subjectService.UpdateSubject(SubjectMapped);
             return result.IsSuccess?
                 Result.Success("Subject Updated successfully.") :Result.Failure<string>(result.error);
+        }
+
+        public async Task<Result<string>> Handle(DeleteSubjectRequestCommand request, CancellationToken cancellationToken)
+        {
+            var result = await _subjectService.DeleteSubjectAsync(request.Id);
+            return result.IsSuccess ?
+               Result.Success("Subject Deleted successfully.") : Result.Failure<string>(result.error);
         }
     }
 }

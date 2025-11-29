@@ -13,6 +13,7 @@ namespace SchoolProject.Infrastructure.Abstracts
         Task<Subject> GetSubjectById(int Id);
         Task<Subject> GetSubjectByIdToUpdate(int Id);
         Task UpdateSubject(Subject Subject);
+        Task DeleteSubjectAsync(Subject subject);
         
     }
 }
