@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SchoolProject.Data.Entites;
 using SchoolProject.Data.Entites.Identity;
+using SchoolProject.Data.Entites.Views;
 using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
 
@@ -24,6 +25,11 @@ namespace SchoolProject.Infrastructure.Data
 
         public DbSet<Instractor> instractors { get; set; }
         public DbSet<Ins_Subject> ins_subjects { get; set; }
+
+
+        #region Views
+        public DbSet<ViewDepartment> ViewDepartment {  get; set; }
+        #endregion
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
         {
             //should key 32 char =128-bit

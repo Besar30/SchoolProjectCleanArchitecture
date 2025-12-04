@@ -15,7 +15,8 @@ using System.Threading.Tasks;
 namespace SchoolProject.Core.Features.Departments.Queires.Handlers
 {
     public class DepartmentQueryHandler(IDepartmentService departmentService,IMapper mapper) : IRequestHandler<GetDepartmentByIdQuery, Result<GetDepartmentByIdResponse>>,
-                                                                                               IRequestHandler<GetAllDepartmentQuery,Result<List<GetDepartmentByIdResponse>>>
+                                                                                               IRequestHandler<GetAllDepartmentQuery,Result<List<GetDepartmentByIdResponse>>>,
+                                                                                               IRequestHandler<GetDepartmentStudentCountQuery,Result<List<GetDepartmentStudentCountResponse>>>
 
     {
         private readonly IDepartmentService _departmentService = departmentService;
@@ -40,6 +41,13 @@ namespace SchoolProject.Core.Features.Departments.Queires.Handlers
             var Departments = await _departmentService.GetAllDepartment();
             var DepaetmentsMapped= _mapper.Map<List<GetDepartmentByIdResponse>>(Departments.Value);
             return Result.Success(DepaetmentsMapped);
+        }
+
+        public async Task<Result<List<GetDepartmentStudentCountResponse>>> Handle(GetDepartmentStudentCountQuery request, CancellationToken cancellationToken)
+        {
+            var result = await _departmentService.GetDepartmentStudentCountAsync();
+            var resultMapped = _mapper.Map<List<GetDepartmentStudentCountResponse>>(result.Value);
+            return Result.Success(resultMapped);
         }
     }
 }

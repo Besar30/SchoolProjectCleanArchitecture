@@ -1,15 +1,19 @@
-﻿using SchoolProject.Data.Entites;
+﻿using Microsoft.EntityFrameworkCore;
+using SchoolProject.Data.Entites;
+using SchoolProject.Data.Entites.Views;
 using SchoolProject.Infrastructure.Abstracts;
+using SchoolProject.Infrastructure.Abstracts.Views;
 using SchoolProject.Service.Abstracts;
 using SchoolProject.Shared.Absractions;
 using SchoolProject.Shared.Errors;
 
 namespace SchoolProject.Service.Implementation
 {
-    public class DepartmentService(IDepartmentRepository departmentRepository,IInstractorRepository instractorRepository) : IDepartmentService
+    public class DepartmentService(IDepartmentRepository departmentRepository,IInstractorRepository instractorRepository,IViewRepository<ViewDepartment> viewRepository) : IDepartmentService
     {
         private readonly IDepartmentRepository _departmentRepository = departmentRepository;
         private readonly IInstractorRepository _instractorRepository = instractorRepository;
+        private readonly IViewRepository<ViewDepartment> _viewRepository = viewRepository;
 
         public async Task<Result> AddDepartmentAsync(Department department)
         {
@@ -73,6 +77,12 @@ namespace SchoolProject.Service.Implementation
         public async Task<Result<List<Department>>> GetAllDepartment()
         {
            var result= await _departmentRepository.GetAllDepartmentAsync();
+            return Result.Success(result);
+        }
+
+        public async Task<Result<List<ViewDepartment>>> GetDepartmentStudentCountAsync()
+        {
+            var result = await _viewRepository.GetTableNoTracking().ToListAsync();
             return Result.Success(result);
         }
     }

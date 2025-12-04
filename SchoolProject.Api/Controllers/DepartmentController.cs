@@ -51,6 +51,14 @@ namespace SchoolProject.Api.Controllers
             return result.IsSuccess ?
                 Ok(result) : result.ToProblem();
         }
+
+        [HttpGet("Get-Department-Student-Count")]
+        public async Task<IActionResult> GetDepartmentStudentCount()
+        {
+            var result = await _mediator.Send(new GetDepartmentStudentCountQuery());
+            return result.IsSuccess ?
+                Ok(result) : result.ToProblem();
+        }
     }
 
 }

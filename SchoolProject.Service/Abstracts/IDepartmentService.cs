@@ -1,4 +1,5 @@
 ﻿using SchoolProject.Data.Entites;
+using SchoolProject.Data.Entites.Views;
 using SchoolProject.Shared.Absractions;
 using System;
 using System.Collections.Generic;
@@ -15,5 +16,6 @@ namespace SchoolProject.Service.Abstracts
         Task<Result>UpdateDepartmentAsync(Department department);
         Task<Result> DeleteDepartmentAsync(int Id);
         Task<Result<List<Department>>> GetAllDepartment();
+        Task<Result<List<ViewDepartment>>> GetDepartmentStudentCountAsync();
     }
 }
