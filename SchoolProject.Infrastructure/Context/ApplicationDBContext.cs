@@ -56,6 +56,10 @@ namespace SchoolProject.Infrastructure.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            modelBuilder.Entity<ViewDepartment>()
+                        .HasNoKey()
+                        .ToView("ViewDepartment");
+
             base.OnModelCreating(modelBuilder);
         }
     }
