@@ -52,13 +52,21 @@ namespace SchoolProject.Api.Controllers
                 Ok(result) : result.ToProblem();
         }
 
-        [HttpGet("Get-Department-Student-Count")]
+        [HttpGet("Get-Department-Student-Count-By-View")]
         public async Task<IActionResult> GetDepartmentStudentCount()
         {
             var result = await _mediator.Send(new GetDepartmentStudentCountQuery());
             return result.IsSuccess ?
                 Ok(result) : result.ToProblem();
         }
+        [HttpGet("Get-Department-Student-Count-By-Id-By-Procedures/{Id}")]
+        public async Task<IActionResult>GetDepartmentStudentCountByIdProc([FromRoute]int Id)
+        {
+            var result= await _mediator.Send(new GetDepartmentStudentCountByIdProcQuery(Id));
+            return result.IsSuccess ?
+                Ok(result) : result.ToProblem();
+        }
+
     }
 
 }

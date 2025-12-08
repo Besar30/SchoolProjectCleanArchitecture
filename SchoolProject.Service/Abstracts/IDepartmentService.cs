@@ -1,4 +1,5 @@
 ﻿using SchoolProject.Data.Entites;
+using SchoolProject.Data.Entites.Procedures;
 using SchoolProject.Data.Entites.Views;
 using SchoolProject.Shared.Absractions;
 using System;
@@ -17,5 +18,6 @@ namespace SchoolProject.Service.Abstracts
         Task<Result> DeleteDepartmentAsync(int Id);
         Task<Result<List<Department>>> GetAllDepartment();
         Task<Result<List<ViewDepartment>>> GetDepartmentStudentCountAsync();
+        Task<Result<IReadOnlyList<DepartmentStudentCountProc>>> GetDepartmentStudentCountProc(DepartmentStudentCountProcParameters parameters);
     }
 }

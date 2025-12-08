@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SchoolProject.Data.Entites;
+using SchoolProject.Data.Entites.Procedures;
 using SchoolProject.Data.Entites.Views;
 using SchoolProject.Infrastructure.Abstracts;
+using SchoolProject.Infrastructure.Abstracts.Procedures;
 using SchoolProject.Infrastructure.Abstracts.Views;
 using SchoolProject.Service.Abstracts;
 using SchoolProject.Shared.Absractions;
@@ -9,12 +11,12 @@ using SchoolProject.Shared.Errors;
 
 namespace SchoolProject.Service.Implementation
 {
-    public class DepartmentService(IDepartmentRepository departmentRepository,IInstractorRepository instractorRepository,IViewRepository<ViewDepartment> viewRepository) : IDepartmentService
+    public class DepartmentService(IDepartmentRepository departmentRepository,IInstractorRepository instractorRepository,IViewRepository<ViewDepartment> viewRepository,IDepartmentStudentCountProcRepository departmentStudentCountProcRepository) : IDepartmentService
     {
         private readonly IDepartmentRepository _departmentRepository = departmentRepository;
         private readonly IInstractorRepository _instractorRepository = instractorRepository;
         private readonly IViewRepository<ViewDepartment> _viewRepository = viewRepository;
-
+        private readonly IDepartmentStudentCountProcRepository _departmentStudentCountProcRepository = departmentStudentCountProcRepository;
         public async Task<Result> AddDepartmentAsync(Department department)
         {
             var NameArIsExist = await _departmentRepository.NameArDepartmentIsExist(department.DNameAr!);
@@ -83,6 +85,14 @@ namespace SchoolProject.Service.Implementation
         public async Task<Result<List<ViewDepartment>>> GetDepartmentStudentCountAsync()
         {
             var result = await _viewRepository.GetTableNoTracking().ToListAsync();
+            return Result.Success(result);
+        }
+
+        public async Task<Result<IReadOnlyList<DepartmentStudentCountProc>>> GetDepartmentStudentCountProc(DepartmentStudentCountProcParameters parameters)
+        {
+            var result= await _departmentStudentCountProcRepository.GetDepartmentStudentCount(parameters);
+            if (result.FirstOrDefault() == null)
+                return Result.Failure<IReadOnlyList<DepartmentStudentCountProc>>(DepartmentErrors.DepartmentNotFound);
             return Result.Success(result);
         }
     }

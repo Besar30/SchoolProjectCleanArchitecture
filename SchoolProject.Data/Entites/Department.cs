@@ -17,8 +17,6 @@ namespace SchoolProject.Data.Entites
         public string? DNameAr { get; set; }
         public string? DNameEn { get; set; }
         public int? InsManger {  get; set; }
-
-
         public virtual ICollection<Student> Students { get; set; }
 
         public virtual ICollection<DepartmetSubject> DepartmentSubjects { get; set; }

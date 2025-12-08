@@ -14,6 +14,7 @@ namespace SchoolProject.Core.Mapping.Departments
             AddDepartmentMapping();
             UpdateDepartmentMapping();
             GetDepartmentStudentCountByIdMapping();
+            GetDepartmentStudentCountByIdProcMapping();
         }
     }
 }

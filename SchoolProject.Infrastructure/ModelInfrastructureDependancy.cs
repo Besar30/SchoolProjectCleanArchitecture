@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SchoolProject.Data.Entites.Views;
 using SchoolProject.Infrastructure.Abstracts;
+using SchoolProject.Infrastructure.Abstracts.Procedures;
 using SchoolProject.Infrastructure.Abstracts.Views;
 using SchoolProject.Infrastructure.InfrastructureBases;
 using SchoolProject.Infrastructure.Reposatories;
+using SchoolProject.Infrastructure.Reposatories.Procedures;
 using SchoolProject.Infrastructure.Reposatories.Views;
 
 namespace SchoolProject.Infrastructure
@@ -17,6 +19,7 @@ namespace SchoolProject.Infrastructure
             services.AddTransient<ISubjectRepository, SubjectRepository>();
             services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
             services.AddTransient<IViewRepository<ViewDepartment>, ViewDepartmentRepository>();
+            services.AddTransient<IDepartmentStudentCountProcRepository, DepartmentStudentCountProcRepository>();
 
             return services;
         }

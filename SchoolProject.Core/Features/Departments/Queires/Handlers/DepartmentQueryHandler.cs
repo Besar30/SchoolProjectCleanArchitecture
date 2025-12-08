@@ -2,6 +2,7 @@
 using MediatR;
 using SchoolProject.Core.Features.Departments.Queires.Models;
 using SchoolProject.Core.Features.Departments.Queires.Responses;
+using SchoolProject.Data.Entites.Procedures;
 using SchoolProject.Service.Abstracts;
 using SchoolProject.Service.Implementation;
 using SchoolProject.Shared.Absractions;
@@ -16,7 +17,8 @@ namespace SchoolProject.Core.Features.Departments.Queires.Handlers
 {
     public class DepartmentQueryHandler(IDepartmentService departmentService,IMapper mapper) : IRequestHandler<GetDepartmentByIdQuery, Result<GetDepartmentByIdResponse>>,
                                                                                                IRequestHandler<GetAllDepartmentQuery,Result<List<GetDepartmentByIdResponse>>>,
-                                                                                               IRequestHandler<GetDepartmentStudentCountQuery,Result<List<GetDepartmentStudentCountResponse>>>
+                                                                                               IRequestHandler<GetDepartmentStudentCountQuery,Result<List<GetDepartmentStudentCountResponse>>>,
+                                                                                               IRequestHandler<GetDepartmentStudentCountByIdProcQuery,Result<GetDepartmentStudentCountProcByIdResponse>>
 
     {
         private readonly IDepartmentService _departmentService = departmentService;
@@ -47,6 +49,16 @@ namespace SchoolProject.Core.Features.Departments.Queires.Handlers
         {
             var result = await _departmentService.GetDepartmentStudentCountAsync();
             var resultMapped = _mapper.Map<List<GetDepartmentStudentCountResponse>>(result.Value);
+            return Result.Success(resultMapped);
+        }
+
+        public async Task<Result<GetDepartmentStudentCountProcByIdResponse>> Handle(GetDepartmentStudentCountByIdProcQuery request, CancellationToken cancellationToken)
+        {
+            var pram = _mapper.Map<DepartmentStudentCountProcParameters>(request);
+            var result = await _departmentService.GetDepartmentStudentCountProc(pram);
+            if (result.isFailure)
+                return Result.Failure<GetDepartmentStudentCountProcByIdResponse>(result.error);
+            var resultMapped= _mapper.Map<GetDepartmentStudentCountProcByIdResponse>(result.Value.First());
             return Result.Success(resultMapped);
         }
     }

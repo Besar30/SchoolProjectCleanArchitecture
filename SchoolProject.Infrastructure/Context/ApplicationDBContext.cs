@@ -7,8 +7,6 @@ using SchoolProject.Data.Entites;
 using SchoolProject.Data.Entites.Identity;
 using SchoolProject.Data.Entites.Views;
 using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
-
 namespace SchoolProject.Infrastructure.Data
 {
     public class ApplicationDBContext:IdentityDbContext<User,ApplicationRole,string>

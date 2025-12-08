@@ -22,8 +22,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var connectionString = builder.Configuration.GetConnectionString("Defaultconnection");
-builder.Services.AddDbContext<ApplicationDBContext>(
-    options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<ApplicationDBContext>(options =>
+    options.UseSqlServer(connectionString, sql =>
+        sql.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
+    )
+);
+
 builder.Services.AddHttpContextAccessor();
 // dependancy injection
 builder.Services.AddInfrastructureDependancy()
