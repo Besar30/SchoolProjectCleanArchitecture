@@ -23,7 +23,7 @@ namespace SchoolProject.Infrastructure.Reposatories
         }
         public async Task<bool> StudentIsExist(int Id)
         {
-           return await _context.Students.AnyAsync(x=>x.StudentID== Id);
+           return await _context.Students.AnyAsync(x=>x.StudentID==Id);
         }
         public async Task<Student?> GetStudentById(int Id)
         {

@@ -24,7 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Student_Subject\Queries\" />
     <Folder Include="Mapping\Authorization\CommandMapping\" />
+    <Folder Include="Mapping\StudentSubjects\Query\" />
   </ItemGroup>
 
   <ItemGroup>

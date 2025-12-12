@@ -34,6 +34,7 @@ namespace SchoolProject.Service
             services.AddTransient<IFileService, FileService>();
             services.AddTransient<IInstractorService, InstractorService>();
             services.AddTransient<ISubjectService, SubjectService>();
+            services.AddTransient<IStudentSubjectServices , StudentSubjectServices>();
             services.AddTransient<IUrlHelper>(x =>
             {
                 var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;

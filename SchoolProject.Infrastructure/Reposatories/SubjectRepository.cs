@@ -67,5 +67,10 @@ namespace SchoolProject.Infrastructure.Reposatories
             _context.Subjects.Remove(subject);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> SubjectIsExist(int Id)
+        {
+            return await _context.Subjects.AnyAsync(x=>x.SubID== Id);
+        }
     }
 }
