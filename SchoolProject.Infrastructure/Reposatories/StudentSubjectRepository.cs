@@ -20,5 +20,12 @@ namespace SchoolProject.Infrastructure.Reposatories
         {
             return await _context.StudentSubjects.AnyAsync(x=>x.StudID==StudentId && x.SubID==subjectId);
         }
+
+        public async Task UpdateStudentSubjectAsync(StudentSubject studentSubject)
+        {
+            var studentSubjectOld = await _context.StudentSubjects.FirstAsync(x => x.StudID == studentSubject.StudID && x.SubID == studentSubject.SubID);
+            studentSubjectOld.Grade=studentSubject.Grade;
+            await _context.SaveChangesAsync();
+        }
     }
 }

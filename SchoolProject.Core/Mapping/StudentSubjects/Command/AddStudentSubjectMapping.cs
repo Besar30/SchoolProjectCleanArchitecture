@@ -6,10 +6,11 @@ namespace SchoolProject.Core.Mapping.StudentSubjects
     {
         void AddStudentSubjectMapping()
         {
-            CreateMap<AddStudentSubjectCommand, StudentSubject>()
-                .ForMember(des=>des.StudID,opt=>opt.MapFrom(src=>src.StudentID))
-                .ForMember(des=>des.SubID,opt=>opt.MapFrom(src=>src.SubjectID))
-                .ForMember(des=>des.Grade,opt=>opt.MapFrom(src=>src.Grade));
+               
+                 CreateMap<AddStudentSubjectCommand, StudentSubject>()
+                 .ForMember(des => des.StudID, opt => opt.MapFrom(src => src.StudentID))
+                 .ForMember(des => des.SubID, opt => opt.MapFrom(src => src.SubjectID))
+                 .ForMember(des => des.Grade, opt => opt.MapFrom(src => src.Grade));
         }
     }
 }

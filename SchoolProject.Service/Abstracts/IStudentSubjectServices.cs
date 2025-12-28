@@ -11,5 +11,6 @@ namespace SchoolProject.Service.Abstracts
     public interface IStudentSubjectServices
     {
         public Task<Result> AddStudentSubjectAsync(StudentSubject studentSubject);
+        public Task<Result> UpdateStudentSubjectAsync(StudentSubject studentSubject);
     }
 }

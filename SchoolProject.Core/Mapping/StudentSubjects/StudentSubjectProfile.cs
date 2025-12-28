@@ -5,6 +5,7 @@ namespace SchoolProject.Core.Mapping.StudentSubjects
     {
        public StudentSubjectProfile() {
             AddStudentSubjectMapping();
+            UpdateStudentSubjectMapping();
         }   
     }
 }

@@ -6,5 +6,6 @@ namespace SchoolProject.Infrastructure.Abstracts
     {
         public Task<bool> StudentSubjectIsExistAlready(int StudentId, int subjectId);
         public Task AddStudentSubjectAsync(StudentSubject studentSubject);
+        public Task UpdateStudentSubjectAsync(StudentSubject studentSubject);
     }
 }

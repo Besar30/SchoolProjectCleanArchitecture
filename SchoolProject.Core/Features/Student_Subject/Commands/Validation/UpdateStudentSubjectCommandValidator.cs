@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace SchoolProject.Core.Features.Student_Subject.Commands.Validation
 {
-    public class StudentSubjectCommandValidator:AbstractValidator<AddStudentSubjectCommand>
+    internal class UpdateStudentSubjectCommandValidator: AbstractValidator<UpdateStudentSubjectCommand>
     {
-        public StudentSubjectCommandValidator() {
+        public UpdateStudentSubjectCommandValidator() {
             RuleFor(x => x.StudentID).NotNull().NotEmpty();
             RuleFor(x => x.SubjectID).NotNull().NotEmpty();
         }

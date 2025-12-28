@@ -15,7 +15,7 @@ namespace SchoolProject.Core.Mapping.Subjects
             CreateMap<StudentSubject, StudentInSubjectResponse>()
                 .ForMember(des => des.StudentName, opt => opt.MapFrom(src => src.Student.GetLocalized(src.Student.NameAr, src.Student.NameEn)))
                 .ForMember(des => des.StudentID, opt => opt.MapFrom(src => src.Student.StudentID))
-                .ForMember(des=>des.Grade,opt=>opt.MapFrom(src=>src.Grade));
+                .ForMember(des => des.Grade, opt => opt.MapFrom(src => src.Grade));
 
             CreateMap<DepartmetSubject, DepartmentInSubjectResponse>()
                 .ForMember(des => des.DepartmentId, opt => opt.MapFrom(src => src.DID))

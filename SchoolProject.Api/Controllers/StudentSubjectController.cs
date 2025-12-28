@@ -19,5 +19,12 @@ namespace SchoolProject.Api.Controllers
             return result.IsSuccess ?
                 Ok(result) : result.ToProblem();
         }
+        [HttpPost("Update-Student-Sublect")]
+        public async Task<IActionResult> UpdateStudentSubjectAsync([FromBody] UpdateStudentSubjectCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return result.IsSuccess ?
+                Ok(result) : result.ToProblem();
+        }
     }
 }
